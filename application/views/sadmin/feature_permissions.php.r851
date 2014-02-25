@@ -1,0 +1,111 @@
+<head>
+	<style>
+		 .error {width: 250px !important;}
+    </style>
+</head>
+<center>
+  <table id="viewer" class="table-striped border-simple" cellpadding="10" style="margin-bottom:20px !important;width:100% !important;">
+    <tr>
+      <td colspan="5" style="padding-left:10px;"><h2>Managing permission for <?php echo ucfirst($name); ?></h2></td>
+    </tr>
+    <tr>
+      <td colspan="5"><?php
+  
+			  $msg = $this->input->get('msg');
+			  $go = $this->input->get('go');
+			  
+			  if($go=='true')
+			  {
+				echo '<span class="success">' ;
+			  }
+			  if($go=='false')
+			  {
+				echo '<span class="error">' ;
+			  }
+			  
+			  
+			  if(!empty($msg))
+			  {  
+				  echo $this->input->get('msg');
+			  }
+  ?>
+        </span></td>
+    </tr>
+    <tr>
+      <td colspan="5" valign="top"><form id="perm_form" action="<?php echo base_url(); ?><?php echo index_page(); ?>/sadmin/addpermission" method="post" >
+          <table width="500">
+            <tr>
+              <td><b>Add new permission </b></td>
+              <td><input type="text" value="" name="permission" /></td>
+            </tr>
+            <tr>
+              <td><strong>Mask name</strong></td>
+              <td><input type="text" value="" name="permission_mask" /></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input type="submit" value="Add" class="btn"></td>
+            </tr>
+          </table>
+          <input type="hidden" value="<?php echo $this->input->get('id'); ?>" class="btn" name="id">
+        </form></td>
+    </tr>
+    <tr>
+      <td colspan="5" style="border:1px solid #900;"><span class="error">* checked = are allowed permissions</span> <br />
+        <span class="error">* by default all accounts are assigned <b>PERSONAL CALENDER<b></span></td>
+    </tr>
+    <form action="<?php echo base_url(); ?><?php echo index_page(); ?>sadmin/saveperuser" method="post" >
+      <tr>
+        <td colspan="5" align="left"><b><?php echo ucfirst($name); ?> can
+          <select name="core_permissions">
+            <?php if($core_permissions==1){ ?>
+            <option selected="selected" value="1"> View </option>
+            <option value="2"> Manage</option>
+            <?php } ?>
+            <?php if($core_permissions==2){ ?>
+            <option  value="1"> View </option>
+            <option selected="selected" value="2"> Manage</option>
+            <?php } ?>
+            <?php if(empty($core_permissions)){ ?>
+            <option  value="1"> View </option>
+            <option  value="2"> Manage</option>
+            <?php } ?>
+          </select>
+          </b> Rights </td>
+      </tr>
+      <tr>
+        <td colspan="5" align="left" style="padding-left:10px;"><h2><b>Normal permissions</b></h2></td>
+      </tr>
+      <tr>
+        <th align="left"> # </th>
+        <th align="left"> Permission name</th>
+        <th align="left"> value </th>
+        <th align="left"> Actions </th>
+      </tr>
+      <?php foreach ($permissions as $counter=>$peritem)
+		{
+			
+		?>
+      <tr id="row_<?php echo $peritem['id']; ?>">
+        <td align="left" style="padding-left:10px;"><b><?php echo $peritem['id']; ?></b></td>
+        <td align="left" style="padding-left:10px;"><?php echo $peritem['permission_mask_name'] ?></td>
+        <?php if(in_array($peritem['id'],$saved_data)){ ?>
+        <td align="left" style="padding-left:10px;"><input type="checkbox" checked name="permis[]" value="<?php echo $peritem['id'] ?>" /></td>
+        <?php }else{ ?>
+        <td align="left" style="padding-left:10px;"><input type="checkbox" name="permis[]" value="<?php echo $peritem['id'] ?>" /></td>
+        <?php } ?>
+        <td align="left" style="padding-left:10px;">
+        
+        <a class="btn" href="<?php echo base_url(); ?><?php echo index_page(); ?>sadmin/removepermi?id=<?php echo $peritem['id']; ?>">remove</a>
+        
+        <a class="btn" id="update_permission_set" href="<?php echo base_url(); ?><?php echo index_page(); ?>sadmin/updatepermissionsname?id=<?php echo $peritem['id']; ?>">Update</a>
+        
+        </td>
+      </tr>
+      <?php } ?>
+      <tr>
+        <td colspan="5" align="right"><input class="btn" type="submit" value="Save permissions" /></td>
+      </tr>
+    </form>
+  </table>
+</center>

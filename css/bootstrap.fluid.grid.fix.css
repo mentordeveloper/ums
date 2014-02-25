@@ -1,0 +1,12 @@
+.row-fluid div.span12 + li {
+	margin-left : 0px;
+}
+.row-fluid div.span6:nth-child(2n + 3) {
+margin-left : 0px;
+}
+.row-fluid div.span4:nth-child(3n + 4) {
+margin-left : 0px;
+}
+.row-fluid div.span3:nth-child(4n + 5) {
+margin-left : 0px;
+}

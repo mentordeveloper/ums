@@ -1,0 +1,277 @@
+/*fixed*/
+
+.theme {
+	display: none;
+}
+.active, th, #navigation a, input[type=submit] {
+	color: #2d2d2d;
+}
+a.edit {
+	background-image: url(edit.png)
+}
+a.delete {
+	background-image: url(trash.png)
+}
+#navigation a:hover {
+	background: #383E3C;
+	color: #FFFFFF;
+}
+#navigation .active {
+	background: #2d2d2d;
+	color: #FFFFFF
+}
+.box, .box > .utils a {
+	background: #fff;
+	border-color: #eee
+}
+.box > h2 {
+	background: url(box-h2.png) repeat-x bottom center #fff
+}
+.error, .success, .info, .error a, .success a, .info a {
+	color: #fff
+}
+.error {
+	background: #901830
+}
+.success {
+	background: #C2EFC2
+}
+.glow-sortable-dropindicator {
+	background: #eee
+}
+.btn > button {
+	background-color: transparent;
+	border: 0 solid #CCCCCC;
+	padding: 0;
+}
+#foot {
+	border-top: 1px solid #CCCCCC;
+	padding-top: 30px;
+}
+#calendar {
+	width: 975px;
+}
+#head h2 a:hover {
+	color: #0088CC;
+	text-decoration: none;
+}
+.fc-event .fc-event-inner .fc-event-time {
+	display: none
+}
+.remove_text_box_css {
+	background: none !important;
+	border: none !important;
+	color: #333;
+	box-shadow: none !important;
+	cursor: text !important;
+}
+.table-striped td {
+	padding-left: 50px;
+	vertical-align: middle !important;
+}
+.border-simple {
+	border: 1PX solid #CCC;
+	width: 600px !important;
+	margin-bottom: 0px !important;
+}
+#write_acccess {
+	padding: 40px;
+}
+.fix-width {
+	width: 233px;
+	padding-bottom: 10px;
+	float: left
+}
+.red_astrick {
+	color: #900;
+	font-weight: bold;
+}
+.floater_right {
+	float: right;
+	color: #900;
+}
+#field_courses_additional {
+	margin-left: 0px;
+}
+.correct_left {
+	margin-left: 9px;
+}
+.all_day {
+	float: right;
+	margin-right: 70px;
+	margin-top: 8px;
+}
+#all_day {
+	float: left;
+	margin-right: 5px;
+}
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   speak for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+.modal_maker {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: rgba( 255, 255, 255, .8 ) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+}
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+	overflow: hidden;
+}
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal_maker {
+	display: block;
+}
+.font_selector_small {
+	font-size: 14px;
+}
+.x_another {
+	position: absolute;
+	width: auto;
+	top: 0px;
+	left: 50%;
+	right: 50%;
+}
+.bg_inactive_class {
+	width: 600px;
+	margin: auto;
+	font-weight: bold;
+	background-color: #933;
+	text-align: center;
+	color: #FFF;
+}
+.notification_inactive {
+	position: relative;
+	width: 100%;
+	float: left;
+}
+#site-body-container {
+}
+#site-body-content {
+	padding: 15px 15px 15px 15px;
+}
+#site-bottom-bar {
+	background-color: #F0F0F0;
+	border-top: 1px solid #CCCCCC;
+	bottom: 0px;
+	font-family: verdana, arial;
+	font-size: 11px;
+	height: 30px;
+	position: fixed;
+	width: 100%;
+	z-index: 1000;
+}
+#site-bottom-bar-frame {
+	height: 30px;
+	margin: 0px 10px 0px 10px;
+	position: relative;
+}
+#site-bottom-bar-content {
+	padding: 3px 0px 0px 0px;
+}
+#menu-root {
+	background-color: #E8E8E8;
+	border: 1px solid #D0D0D0;
+	color: #000000;
+	display: block;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	text-decoration: none;
+	width: 105px;
+}
+#menu-root:hover {
+	background-color: #666666;
+	border-color: #000000;
+	color: #FFFFFF;
+}
+#menu {
+	background-color: #E8E8E8;
+	border: 1px solid #666666;
+	bottom: 32px;
+	display: none;
+	left: 0px;
+	padding: 5px 5px 1px 5px;
+	position: absolute;
+	width: 200px;
+}
+#menu a {
+	background-color: #E8E8E8;
+	border: 1px solid #FFFFFF;
+	color: #000000;
+	display: block;
+	margin-bottom: 4px;
+	padding: 5px 0px 5px 5px;
+	text-decoration: none;
+}
+#menu a:hover {
+	background-color: #666666;
+	border-color: #000000;
+	color: #FFFFFF;
+}
+/* -------------------------------------------------- */
+/* -- IE 6 FIXED POSITION HACK ---------------------- */
+/* -------------------------------------------------- */
+
+html, body, #site-body-container {
+	_height: 100%;
+	_overflow: hidden;
+	_width: 100%;
+}
+#site-body-container {
+	_overflow-y: scroll;
+	_overflow-x: hidden;
+	_position: relative;
+}
+/* To make up for scroll-bar. */
+#site-bottom-bar {
+	_bottom: -1px;
+	_position: absolute;
+	_right: 16px;
+}
+/* To make up for overflow left. */
+#site-bottom-bar-frame {
+	_margin-left: 26px;
+	width: 100%;
+}
+/* To fix IE6 display bugs. */
+#menu span {
+	_display: inline-block;
+	_width: 99%;
+	cursor: pointer;
+}
+#container_mine {
+	z-index: 9999;
+	bottom: 0px;
+	display: none;
+	position: fixed;
+	width: 360px;
+	float: right;
+}
+#inner {
+	float: right;
+	background-color: #F0F0F0;
+	border-bottom-width: 0px;
+	padding: 20px 20px 100px 20px;
+}
+.nav li a img {
+	width: 20px;
+}
+.beautify-me {
+	float: left;
+	padding: 5px;
+	border: 1px solid black;
+	margin: 5px;
+	background-color: #CCC;
+}
+.dz-hide {
+	display: none;
+}

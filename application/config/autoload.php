@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session', 'xmlrpc', 'pagination',  '
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'file', 'form', 'cookie');
+$autoload['helper'] = array('url', 'file', 'form', 'cookie','HTML', 'language', 'mci','ckeditor','css','recaptchalib','date_time','date');
 
 
 /*

@@ -1,0 +1,125 @@
+@charset "utf-8";
+/* CSS Document */
+
+.login-head {
+	background-color: #fff;
+	border: 1px solid #CCCCCC;
+	margin: 100px auto auto;
+	width: 471px;
+	background: none repeat scroll 0 0 padding-box #FDFDFD;
+	border: 1px solid #bdbdbd;
+	-moz-border-radius: 4px 4px 4px 4px;
+	border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+.remover-some {
+	text-align: right;
+	margin: 0px auto auto;
+	width: 471px;
+}
+.remover-some ul li {
+	float: right;
+	padding-left: 30px;
+	list-style: none;
+	text-align: right;
+	line-height: 10px;
+}
+.btn > input {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+}
+input[type="text"], input[type="password"] {
+	width: 350px !important;
+}
+.bottom-buttons {
+	text-align: center;
+	margin-top: 18px;
+}
+#head {
+	background: none repeat scroll 0 0 #517FA4;
+	height: 30px;
+	padding: 4px 0 14px;
+	text-align: center;
+}
+#head a {
+	color: white;
+}
+.error, .success, .info, .error a, .success a, .info a {
+	color: #fff;
+}
+.error {
+	background: #901830
+}
+.success {
+	background: #C2EFC2
+}
+#head a:hover {
+	text-decoration: none;
+}
+.form-horizontal {
+	padding-top: 20px;
+}
+.form-horizontal .control-label {
+	width: 133px !important;
+}
+.form-horizontal .controls {
+	margin-left: 155px !important;
+	width: 219px;
+}
+form {
+	margin: 0 0 2px !important;
+}
+#footer {
+	position: absolute;
+	bottom: 0;
+	width: 100% !important;
+	height: 30px;
+}
+#footer p {
+	font-size: 11px;
+	float: right;
+	width: 280px;
+	color: #FFF;
+}
+#login-bg p {
+	color: #FFF;
+}
+.text_field {
+	height: 25px !important;
+}
+.error {
+	width: 220px !important;
+	font-size: 12px;
+}
+html, body {
+	background-color: #eee;
+}
+body {
+	padding-top: 120px;
+}
+.container {
+	width: 300px;
+}
+/* The white background content wrapper */
+.container > .content {
+	background-color: #fff;
+	padding: 20px;
+	margin: 0 -89px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+	-moz-border-radius: 10px 10px 10px 10px;
+	border-radius: 10px 10px 10px 10px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+.login-form {
+	margin-left: 65px;
+}
+legend {
+	margin-right: -50px;
+	font-weight: bold;
+	color: #404040;
+}

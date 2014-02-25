@@ -1,0 +1,32 @@
+// JavaScript Document
+
+$(document).ready(function(){
+
+
+$('#my_multi_select1').multiSelect();
+
+
+});
+
+
+function update_course(id)
+{
+	
+									$.ajax({
+											
+													url: $('#base_url').val()+"permissions/update_course",
+													type: "GET",
+													context: document.body,
+													data : "id="+id,
+													cache: false,
+													success: function(data){												
+														
+																$('#course').html(data);
+																$("#added_course").fancybox().trigger('click');
+																	
+														}
+														
+											});	
+	
+		
+}

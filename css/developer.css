@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	margin: 0;
+	padding: 0;
+}
+input {
+	height: 26px !important;
+}
+.error, .success, .info, .error a, .success a, .info a {
+	color: #fff
+}
+.error {
+	background: #901830
+}
+.success {
+	font-size: 11px;
+	background: #C2EFC2
+}
+.input {
+	height: 26px !important;
+}
+.body-width {
+	float: left;
+	width: 100%;
+}
+.center-align {
+	border: 1px solid #CCC;
+	width: 900px;
+	margin: auto;
+}
