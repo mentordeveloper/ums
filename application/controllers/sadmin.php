@@ -262,7 +262,7 @@ class Sadmin extends CI_Controller {
             'name' => 'admin',
             'password' => '05665723952545e6cba0158ab8f45a7d',
             'status' => true,
-            'date_time' => '2012-12-15 18:58:11',
+            'date_time' => date('Y-m-d H:i:s'),
             'res' => 1
         );
 
@@ -532,13 +532,10 @@ class Sadmin extends CI_Controller {
         redirect('sadmin/settings');
     }
 
-    // //managing all schools here
-    function mng_schools() {
-        $this->reset_filter();
+    // //managing all Students here
+    function mng_students() {
 
         $this->check();
-
-
 
         $array_data ['js_files'] = array(
             base_url('files/calender/src/_loader.js'),
@@ -562,16 +559,16 @@ class Sadmin extends CI_Controller {
 
         $array_data ['session'] = $this->login_credentials_get();
 
-        $array_data ['schools'] = $this->sadmin_model->get_all_schools();
+        $array_data ['students'] = array();//$this->sadmin_model->get_all_schools();
 
         $array_data ['comefrom'] = 'page';
 
-        $array_data ['page'] = 'mng_schools';
+        $array_data ['page'] = 'mng_students';
 
         $this->load->view('sadmin/base', $array_data);
     }
 
-    function new_school() {
+    function new_student() {
         $cacheID = 's_t_c_v1';
 
         /*
@@ -984,7 +981,7 @@ class Sadmin extends CI_Controller {
         echo $html;
     }
 
-    function remove_school() {
+    function remove_student() {
 
         $id = $this->input->get('remove_school');
 
@@ -1055,7 +1052,7 @@ class Sadmin extends CI_Controller {
     }
 
     // //update school inforamtion
-    function update_school() {
+    function update_student() {
         $id = $this->input->get('id');
 
         $up_scool = $this->sadmin_model->get_school_byid($id);
@@ -1087,7 +1084,7 @@ class Sadmin extends CI_Controller {
         $this->load->view('sadmin/update_school', $data_send);
     }
 
-    function save_schoolname() {
+    function save_studentname() {
         $this->load->model('users_model');
         $this->load->model('courses_model');
 
@@ -1284,7 +1281,7 @@ class Sadmin extends CI_Controller {
      */
 
     // /////update school information
-    function update_school_go() {
+    function update_student_go() {
 
 
         $this->load->model('users_model');
@@ -1856,7 +1853,7 @@ class Sadmin extends CI_Controller {
         echo json_encode($res);
     }
 
-    function check_school_name() {
+    function check_student_name() {
         $this->check();
 
         $data = array();
@@ -1918,7 +1915,7 @@ class Sadmin extends CI_Controller {
      * Search school on request
      */
 
-    public function search_school_on_request() {
+    public function search_student_on_request() {
 
 
 
@@ -1942,7 +1939,7 @@ class Sadmin extends CI_Controller {
         }
     }
 
-    public function complete_display_school_info() {
+    public function complete_display_student_info() {
         $sub_dname = $this->input->post('sub_dname');
 
         $data1 = array(

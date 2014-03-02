@@ -1,6 +1,6 @@
 
 <div class="footer">
-  <p>Copyright © FbombMedia LLC 2012. All rights reserved.</p>
+  <p>Copyright © Mentordeveloper 2014. All rights reserved.</p>
 </div>
 <!--footer-->
 </div>

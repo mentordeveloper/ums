@@ -15,7 +15,7 @@ if(!isset($css_files))
 <!--[if IE 8]>
 <?=link_tag('themes/starlight/css/ie8.css');?>
 <![endif]-->
-<!--[if IE 7]>
+<!--[if IE 7]>theme
 <?=link_tag('themes/starlight/css/ie7.css');?>
 <![endif]-->
 
@@ -30,7 +30,6 @@ if(!isset($css_files))
 
 -->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>files/fancybox/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-<link rel="shortcut icon" href="<?php echo base_url(); ?>elevaterfavicon.ico" type="image/x-icon" />
 <?php foreach($css_files as $file): ?>
 <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
 <?php endforeach; ?>
@@ -39,7 +38,9 @@ if(!isset($css_files))
 
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>files/fancybox/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>files/anytime/anytime.css" media="screen" />
-
+<style>
+    .theme{display: none;}
+</style>
 </head>
 <body class="loggedin">
 <script src="<?php echo base_url('files/date_picker/js/jquery-1.8.2.min.js') ?>" type="text/javascript"></script>
