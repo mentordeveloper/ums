@@ -3,9 +3,9 @@
 <div class="maincontent noright">
 <div class="maincontentinner">
   <ul class="maintabmenu">
-    <li class="current"><a href="<?php echo base_url(); ?>sadmin/mng_schools">Students Managment</a></li>
+    <li class="current"><a href="<?php echo site_url(); ?>/sadmin/mng_students">Students Managment</a></li>
   </ul>
-  <div class="content"> <a class="stdbtn" href="<?php echo base_url().'sadmin/new_student' ?>" id="add_school_new">Add Student</a> <br/>
+  <div class="content"> <a class="stdbtn" href="<?php echo site_url().'/sadmin/new_student' ?>" id="add_school_new_3">Add Student</a> <br/>
     <br/>
     <div class="contenttitle radiusbottom0">
       <h2 class="table"><span>Managment</span></h2>

@@ -184,7 +184,7 @@ class Sadmin extends CI_Controller {
 
     function loggedin() {
 
-        redirect('sadmin/index');
+        redirect('sadmin/home');
     }
 
     function reset_filter() {
