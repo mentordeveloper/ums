@@ -1,0 +1,29 @@
+.btnFlat {0
+     ba0ckground: #ECECEC;
+        bo0rder: 1px solid #D3D3D3;
+     cu0rsor: pointer;
+        cu0rsor: hand;
+     te0xt-align:center;
+        fo0nt-family:Urdu Naskh Asiatype;
+     fo0nt-size:12px;
+}         0
+        0
+	.btnRaised0, .btnFlat:hover {
+      ba0ckground: #D3D3D3;
+	        bo0rder: 1px outset;
+      cu0rsor: pointer;
+	        cu0rsor: hand;
+      te0xt-align:center;
+	        fo0nt-family:Urdu Naskh Asiatype;
+      fo0nt-size:12px;
+	}         0
+tnLowere0d, .btnFlat:active {
+	        ba0ckground: #D3D3D3;
+      bo0rder: 1px inset;
+	        cu0rsor: pointer;
+      cu0rsor: hand;
+	        te0xt-align:center;
+      fo0nt-family:Urdu Naskh Asiatype;
+	        fo0nt-size:12px;
+        0
+	.hiddentex0t {display:none}
