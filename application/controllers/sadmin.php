@@ -306,11 +306,6 @@ class Sadmin extends CI_Controller {
         $this->load->view('sadmin/base', $array_data);
     }
 
-  
-  
-  
- 
-
     function my_trigger_email_sadmin($data) {
         $this->load->library('email');
 
@@ -564,31 +559,447 @@ class Sadmin extends CI_Controller {
         $array_data ['comefrom'] = 'page';
 
         $array_data ['page'] = 'mng_students';
-
+         $array_data ['title'] = 'Manage Students';
         $this->load->view('sadmin/base', $array_data);
     }
 
     function new_student() {
-        $cacheID = 's_t_c_v1';
+        $this->load->model('users_model');
+//        $array_data['schools_type'] = $this->users_model->get_skool_type('', '');
+        $this->check();
 
+        $array_data ['js_files'] = array(
+//            base_url('files/calender/src/_loader.js'),
+            base_url('files/date_picker/js/jquery-ui-1.8.24.custom.min.js'),
+//            base_url('js/knockout-latest.js'),
+//            base_url('js/instructor.calendar.subscriptions.ko.js'),
+//            base_url('js/instructor.calendar.export.ko.js'),
+            base_url('js/jax.js'),
+            base_url('js/extended.modal.jquery.js'),
+            base_url('js/extended.alert.js'),
+            base_url('js/jaxhandler.js'),
+            base_url('files/fancybox/fancybox/jquery.mousewheel-3.0.4.pack.js'),
+            base_url('files/fancybox/fancybox/jquery.fancybox-1.3.4.pack.js'),
+            base_url('files/jquery_masking/masking.js'),
+            base_url('files/uploadify/jquery.uploadify.min.js'),
+            base_url('files/js/jquery_validation.js'),
+            base_url('js/sadmin.index.js'),
+//            base_url('themes/starlight/js/plugins/jquery.dataTables.min.js'),
+//            base_url('themes/starlight/js/custom/tables.js')
+        );
+
+        $array_data ['session'] = $this->login_credentials_get();
+
+        $array_data ['addmission_id'] = $this->sadmin_model->get_max_addmission_id();
+        $array_data ['students'] = array();//$this->sadmin_model->get_all_schools();
+        $array_data ['countries'] = $this->sadmin_model->get_all_countries();
+
+        $array_data ['comefrom'] = 'page';
+
+        $array_data ['page'] = 'mng_students';
+        $array_data ['title'] = 'New Student';
+
+//printr($array_data);
+        $this->load->view('sadmin/base', $array_data);
+    }
+    
+    function save_student() {
+        $this->load->model('users_model');
+    
+        $data_send = array();
+//printr($this->input->post());
+        $data_student_arr = array();
+
+        '[addmission_id] => 1
+        [add_date] => 03-10-2014
+        [lg_fname] => ندفالسج
+        [lg_lname] => sadjla
+        [lg_username] => admin
+        [lg_password] => allah1@
+        [dob] => 03-10-2014
+        [gender] => male
+        [fin_cate] => libyan
+        [blood_group] => A+
+        [birth_place] => asda
+        [nationality] => Libyan_Arab_Jamahiriya
+        [mother_lang] => urdu
+        [add_cate] => 1
+        [religion] => Islam
+        [national_id] => 3520251426271
+        [transportation] => no
+        [accommodation] => no
+        [eng_name] => umair majeed
+        [faculty] => BIT
+        [year] => 2014
+        [batch] => Fall
+        [bar_num] => BIT_Fall_2014_1
+        [address1] => lahore
+        [address2] => lahore
+        [city] => lahore
+        [state] => punjab
+        [pin_code] => 54000
+        [country] => Libyan_Arab_Jamahiriya
+        [phone] => 54545454
+        [m_phone] => 455256625205
+        [lg_email] => mum@gmail.com
+        [par_fname] => abdul
+        [par_lname] => majeed
+        [par_relation] => Islam
+        [par_dob] => 343434
+        [par_education] => MA
+        [par_occupation] => Teaching
+        [par_email] => majeed@gamil.com
+        [par_address1] => lahore
+        [par_address2] => lhaore
+        [par_city] => lahore
+        [par_state] => punjab
+        [par_country] => Libyan_Arab_Jamahiriya
+        [par_phone1] => 349034043043
+        [par_phone2] => 9430304349309
+        [par_mobile] => 304349030949304
+        [ins_name] => PUCIT
+        [ed_course] => BSIT
+        [ed_year] => 2014
+        [ed_total_marks] => 4
+        [ed_total_grade] => 3.35';
+        
+        $data_login = array();
+        $data_login ['lg_fname'] = $this->input->post('lg_fname');
+        $data_login ['lg_lname'] = $this->input->post('lg_lname');
+        $data_login ['lg_email'] = $this->input->post('lg_email');
+        $data_login ['lg_email_id'] = $this->input->post('lg_lname');
+        $data_login ['lg_password'] = md5('user');
+        $data_login ['lg_type'] = $this->sadmin_model->get_role_id_by_name('university');
+        $data_login ['s_id'] = 1;
+        $data_login ['is_super_admin'] = 2;
+        
+        $user_id = $this->users_model->save_user_login($data_login);
+        $data_login ['lg_id'] = $user_id;
         /*
-         * load by zend cache
-         * stooping the query everytime to go
+         * Student Info Personal, Contact, Academic and Admission.
          */
+        $data_student = array();
+        $data_student['st_lg_id'] = $user_id;
+        $data_student['st_addmission_id'] = $this->input->post('addmission_id');
+        $data_student['st_add_date'] = $this->input->post('add_date');
+        $data_student['st_fname'] = $this->input->post('lg_fname');
+//        $data_student['st_mname'] = $this->input->post('lg_fname');
+        $data_student['st_lname'] = $this->input->post('lg_lname');
+        $data_student['st_faculty'] = $this->input->post('faculty');
+        $data_student['st_year'] = $this->input->post('year');
+        $data_student['st_batch'] = $this->input->post('batch');
+        $data_student['st_roll_number'] = $this->input->post('bar_num');
+        
+        
+//        ucwords(ci_urldecode(
 
-        $array_data ['schools_type'] = $this->zf_cache->load($cacheID);
+        $data_student['st_dob'] = $this->input->post('dob');
+        $data_student['st_gender'] = $this->input->post('gender');
+        $data_student['st_fin_cate'] = $this->input->post('fin_cate');
+        $data_student['st_blood_group'] = $this->input->post('blood_group');
+        $data_student['st_birth_place'] = $this->input->post('birth_place');
+        $data_student['st_nationality'] = $this->input->post('nationality');
+        $data_student['st_mother_tongue'] = $this->input->post('mother_lang');
+        '[add_cate] => 1
+        [religion] => Islam
+        [national_id] => 3520251426271
+        [transportation] => no
+        [accommodation] => no
+        [eng_name] => umair majeed
+        
+        [address1] => lahore
+        [address2] => lahore
+        [city] => lahore
+        [state] => punjab
+        [pin_code] => 54000
+        [country] => Libyan_Arab_Jamahiriya
+        [phone] => 54545454
+        [m_phone] => 455256625205
+        [lg_email] => mum@gmail.com
+        ';
+        $data_student['st_cate'] = $this->input->post('add_cate');
+        $data_student['st_religion'] = $this->input->post('religion');
+        $data_student['st_nationalId'] = $this->input->post('national_id');
+        $data_student['st_address_1'] = $this->input->post('address1');
+        $data_student['st_addres_2'] = $this->input->post('address2');
+        $data_student['st_city'] = $this->input->post('city');
+        $data_student['st_state'] = $this->input->post('state');
+        $data_student['st_pin_code'] = $this->input->post('pin_code');
+        $data_student['st_country'] = $this->input->post('country');
+        $data_student['st_phone'] = $this->input->post('phone');
+        $data_student['st_mphone'] = $this->input->post('m_phone');
+        $data_student['st_email'] = $this->input->post('lg_email');
+        $data_student['st_image'] = $this->input->post('lg_fname');
+        $data_student['st_transportation'] = $this->input->post('lg_fname');
+        $data_student['st_accommodation'] = $this->input->post('lg_fname');
+        $data_student['st_eng_name'] = $this->input->post('lg_fname');
+        $data_student['st_last_ins_name'] = $this->input->post('lg_fname');
+        $data_student['st_last_ins_course'] = $this->input->post('lg_fname');
+        $data_student['st_last_ins_year'] = $this->input->post('lg_fname');
+        $data_student['st_last_ins_t_mark'] = $this->input->post('lg_fname');
+        $data_student['st_last_ins_y_mark'] = $this->input->post('lg_fname');
+        $data_student['st_data'] = $this->input->post('lg_fname');
+        
 
-        /*
-         * if cache does not exists
-         */
+        // ////////////////////////// end of linking up with unversity calender
+        // and new role
+        // //adding school admin school course
+        // /////////////
+        $this->load->library('pagination');
 
-        if (!$array_data ['schools_type']) {
-            $this->load->model('users_model');
-            $array_data['schools_type'] = $this->users_model->get_skool_type('', '');
-            $this->zf_cache->save($array_data['schools_type'], $cacheID, array('all_roles'));
+        $config ['base_url'] = base_url() . index_page() . '/sadmin/mng_schools';
+
+        $config ['total_rows'] = $this->sadmin_model->static_count_schools();
+
+        $config ['per_page'] = 10;
+
+        $config ["uri_segment"] = 3;
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $data_send ['schools'] = $this->sadmin_model->get_all_schools($config ["per_page"], $page);
+
+        // $array_data['comefrom'] = 'page';
+        $data_send ['comefrom'] = 'ajax';
+
+        $data_send ['page'] = 'mng_schools';
+
+        if ($page == 'First') {
+            $data_send ['i'] = 1;
+        } else {
+            $data_send ['i'] = (10 * $page / 10) + 1;
         }
 
-        $this->load->view('sadmin/new_school', $array_data);
+        $data_send ['schools'] = $this->sadmin_model->get_all_schools();
+
+        if ($this->input->post('page') == 'page') {
+            echo 'saved';
+        } else {
+
+            $this->load->view('sadmin/mng_schools', $data_send);
+        }
+    }
+
+
+    function remove_student() {
+
+        $id = $this->input->get('remove_school');
+
+        $data = $this->sadmin_model->get_school_byid($id);
+
+        $this->zf_cache->remove($data['school_subdomain']);
+
+        $this->sadmin_model->additional_general($id);
+
+        $this->sadmin_model->adittional_info($id);
+
+        $this->sadmin_model->assignments_uploads($id);
+
+        $this->sadmin_model->remove_attendences($id);
+
+        $this->sadmin_model->attendence_notes($id);
+
+        $this->sadmin_model->courses_relationship($id);
+
+        $this->sadmin_model->remove_custom_event_types($id);
+
+        $this->sadmin_model->remove_event_general($id);
+
+        $this->sadmin_model->remove_file_sharing($id);
+
+        $this->sadmin_model->remove_forum($id);
+
+        $this->sadmin_model->remove_groupchat($id);
+
+        $this->sadmin_model->remove_groupchatdata($id);
+
+        $this->sadmin_model->remove_instructor_hours($id);
+
+        $this->sadmin_model->remove_messages($id);
+
+        $this->sadmin_model->remove_notification($id);
+
+        $this->sadmin_model->remove_permissions($id);
+
+        $this->sadmin_model->remove_user_colors($id);
+
+        $school_role = $this->sadmin_model->get_role_id_by_name('admin school');
+
+        $this->sadmin_model->remove_school_record($id, $school_role);
+
+        $this->sadmin_model->remove_school_users_all($id);
+
+        $this->sadmin_model->remove_school_users_custom_calender($id);
+
+        $this->sadmin_model->remove_threadposts($id);
+
+        $this->sadmin_model->remove_settings_school($id);
+
+        $this->sadmin_model->remove_roles($id);
+
+        $this->sadmin_model->deny_req1($id);
+    }
+
+    function update_student() {
+        $id = $this->input->get('id');
+
+        $up_scool = $this->sadmin_model->get_school_byid($id);
+
+        $data_send ['schools'] = $up_scool;
+
+        $data_send ['comefrom'] = 'ajax';
+
+        $get_skool = $this->users_model->dropdown_skooltype();
+
+        $type_s = '';
+
+        $data_send ['selected'] = '';
+
+        if (!empty($get_skool)) {
+            foreach ($get_skool as $i => $get_s_type) {
+                if ($get_s_type ['role_name'] == $up_scool ['type']) {
+                    $data_send ['selected'] = $i;
+                }
+
+                $type_s [] = $get_s_type ['role_name'];
+            }
+
+            $data_send ['schools_type'] = form_dropdown('role_name', $type_s, $data_send ['selected'], 'id="skool_typee"');
+
+            $data_send ['schools_chek'] = $type_s;
+        }
+
+        $this->load->view('sadmin/update_school', $data_send);
+    }
+
+
+    /*
+     * Add default payments
+     */
+
+    // /////update school information
+    function update_student_go() {
+
+
+        $this->load->model('users_model');
+
+        $data_send = array();
+
+        $data ['school_username'] = $this->input->post('school_username');
+
+        if ($this->input->post('school_password') != '') {
+            $data ['school_password'] = md5($this->input->post('school_password'));
+        }
+        $data ['status'] = $this->input->post('status');
+        $data ['date_time'] = date_time_helper_current_date();
+        $data ['school_email'] = $this->input->post('school_email');
+        $data ['type'] = $this->input->post('s_type');
+
+        $id = $this->input->post('id');
+
+        $resultant = $this->users_model->get_school_record($id);
+        $rec_id = '';
+        $per_id = '';
+        $USer_id = '';
+        $USer_role = '';
+
+        foreach ($resultant as $manag_arr) {
+            $USer_id = $manag_arr ['id'];
+            $USer_role = $manag_arr ['role_name'];
+        }
+
+        if ($this->input->post('s_type') != $USer_role) {
+
+            $this->users_model->update_existing_record($data ['type'], $USer_id);
+            // get role id of main super admin role type to get its permission
+            $resultat = $this->users_model->get_record_main($data ['type']);
+
+            foreach ($resultat as $manag_arry) {
+                $rec_id = $manag_arry ['id'];
+            }
+
+            $result = $this->users_model->get_permission_ofskool($rec_id);
+            $core = '';
+            foreach ($result as $manag) {
+                $per_id = $manag ['permission_array'];
+                $core = $manag ['permission_core'];
+            }
+
+            $data_array ['permission_array'] = $per_id;
+            $data_array ['admin_permissions'] = '';
+            $data_array ['permission_core'] = $core;
+            if ($data_array ['permission_array'] != 'false')
+                $this->users_model->update_school_permisions($data_array, $USer_id);
+
+            $rest = array();
+            $temp = array();
+            // retrieve all roles existig in this school
+            $rest = $this->sadmin_model->retrieve_school_roles($id);
+            if (!empty($rest)) {
+
+                foreach ($rest as $get_rest) {
+                    $temp [] = $get_rest ['id'];
+                }
+
+                $i = 0;
+                $dataarray = array();
+                for ($i; $i < count($temp); $i++) {
+
+                    $dataarray ['permission_array'] = $per_id;
+                    $dataarray ['admin_permissions'] = $per_id;
+                    $res = $this->sadmin_model->update_school_roles($dataarray, $temp [$i]);
+                }
+            }
+        }
+        // also update all roles existing in this school
+
+        $res = $this->sadmin_model->update_school_record($data, $id);
+
+        $data_send ['schools'] = $this->sadmin_model->get_all_schools('', '');
+
+        $data_send ['comefrom'] = 'page';
+
+        $data_send ['page'] = 'mng_schools';
+
+        $data_send ['comefrom'] = 'ajax';
+
+        $this->load->view('sadmin/mng_schools', $data_send);
+    }
+    
+    function check_student_name() {
+        $this->check();
+
+        $data = array();
+
+
+        $data ['name'] = $this->input->post('name');
+        $data ['username'] = $this->input->post('username');
+        $data ['domainname'] = $this->input->post('domainname');
+
+        $res = $this->sadmin_model->check_school_record($data);
+
+        // checking for school username
+
+        if ($res) {
+            echo 'false';
+            die();
+        }
+
+        $username = $this->sadmin_model->check_school_username($data);
+
+        if ($username) {
+            echo 'false';
+            die();
+        }
+
+        $domainname = $this->sadmin_model->check_school_domainname($data);
+
+        if ($domainname) {
+            echo 'false';
+            die();
+        }
     }
 
 
@@ -981,64 +1392,6 @@ class Sadmin extends CI_Controller {
         echo $html;
     }
 
-    function remove_student() {
-
-        $id = $this->input->get('remove_school');
-
-        $data = $this->sadmin_model->get_school_byid($id);
-
-        $this->zf_cache->remove($data['school_subdomain']);
-
-        $this->sadmin_model->additional_general($id);
-
-        $this->sadmin_model->adittional_info($id);
-
-        $this->sadmin_model->assignments_uploads($id);
-
-        $this->sadmin_model->remove_attendences($id);
-
-        $this->sadmin_model->attendence_notes($id);
-
-        $this->sadmin_model->courses_relationship($id);
-
-        $this->sadmin_model->remove_custom_event_types($id);
-
-        $this->sadmin_model->remove_event_general($id);
-
-        $this->sadmin_model->remove_file_sharing($id);
-
-        $this->sadmin_model->remove_forum($id);
-
-        $this->sadmin_model->remove_groupchat($id);
-
-        $this->sadmin_model->remove_groupchatdata($id);
-
-        $this->sadmin_model->remove_instructor_hours($id);
-
-        $this->sadmin_model->remove_messages($id);
-
-        $this->sadmin_model->remove_notification($id);
-
-        $this->sadmin_model->remove_permissions($id);
-
-        $this->sadmin_model->remove_user_colors($id);
-
-        $school_role = $this->sadmin_model->get_role_id_by_name('admin school');
-
-        $this->sadmin_model->remove_school_record($id, $school_role);
-
-        $this->sadmin_model->remove_school_users_all($id);
-
-        $this->sadmin_model->remove_school_users_custom_calender($id);
-
-        $this->sadmin_model->remove_threadposts($id);
-
-        $this->sadmin_model->remove_settings_school($id);
-
-        $this->sadmin_model->remove_roles($id);
-
-        $this->sadmin_model->deny_req1($id);
-    }
 
 
     function mng_account() {
@@ -1051,323 +1404,7 @@ class Sadmin extends CI_Controller {
         $this->load->view('sadmin/mng_account', $array_data);
     }
 
-    // //update school inforamtion
-    function update_student() {
-        $id = $this->input->get('id');
-
-        $up_scool = $this->sadmin_model->get_school_byid($id);
-
-        $data_send ['schools'] = $up_scool;
-
-        $data_send ['comefrom'] = 'ajax';
-
-        $get_skool = $this->users_model->dropdown_skooltype();
-
-        $type_s = '';
-
-        $data_send ['selected'] = '';
-
-        if (!empty($get_skool)) {
-            foreach ($get_skool as $i => $get_s_type) {
-                if ($get_s_type ['role_name'] == $up_scool ['type']) {
-                    $data_send ['selected'] = $i;
-                }
-
-                $type_s [] = $get_s_type ['role_name'];
-            }
-
-            $data_send ['schools_type'] = form_dropdown('role_name', $type_s, $data_send ['selected'], 'id="skool_typee"');
-
-            $data_send ['schools_chek'] = $type_s;
-        }
-
-        $this->load->view('sadmin/update_school', $data_send);
-    }
-
-    function save_studentname() {
-        $this->load->model('users_model');
-        $this->load->model('courses_model');
-
-        $data_send = array();
-
-        $data_school_arr = array();
-
-
-        if ($this->input->post('s_type')) {
-            $data ['type'] = $this->input->post('s_type');
-        }
-        else
-            $data ['type'] = '';
-
-        $data ['name'] = $this->input->post('name');
-        $data ['school_username'] = $this->input->post('school_username');
-        $data ['school_password'] = md5($this->input->post('school_password'));
-        $data ['school_subdomain'] = strtolower($this->input->post('school_subdomain'));
-        $data ['status'] = $this->input->post('status');
-        $data ['school_email'] = $this->input->post('email');
-        $data ['date_time'] = date_time_helper_current_date();
-
-        $this->school_pass = $this->input->post('school_password');
-        $this->session->set_userdata("school_password", $this->input->post('school_password'));
-
-        $data_school = array();
-
-        $school_id = $this->sadmin_model->save_school_record($data);
-        $data['id'] = $school_id;
-        $data_school_arr['school_data'] = $data;
-
-
-        $data_school ['lg_fname'] = $this->input->post('name');
-        $data_school ['lg_lname'] = $this->input->post('name');
-        $data_school ['lg_email'] = $this->input->post('school_username');
-        $data_school ['lg_email_id'] = $this->input->post('email');
-        $data_school ['lg_password'] = md5($this->input->post('school_password'));
-        $data_school ['is_super_admin'] = 2;
-
-        // /this is for making available to user the same login as for backend
-        // admin so we can automatically login user ans start making using
-        // personal calalender
-
-        $data_school ['lg_type'] = $this->sadmin_model->get_role_id_by_name('admin school');
-        $data_school ['s_id'] = $school_id;
-
-        $user_id = $this->users_model->save_user_login($data_school);
-
-        $data_school ['lg_id'] = $user_id;
-
-        $data_school_arr['login_data'] = $data_school;
-
-        // ////////////////////////// end of linking up with unversity calender
-        // and new role
-        // //adding school admin school course
-
-        $default_course = array(
-            'co_name' => 'School Calendar',
-            'date_time' => date("Y-m-d H:i:s"),
-            's_id' => $school_id,
-            'status' => 'true',
-            'type' => 'Calendar'
-        );
-
-        $course_id = $this->courses_model->save_course_record_other($default_course);
-        $default_course['co_id'] = $course_id;
-
-        $data_school_arr['default_course'] = $default_course;
-
-        // /for adding personal for every user for that school
-
-        $default_personal = array(
-            'co_name' => 'Personal',
-            'date_time' => date("Y-m-d H:i:s"),
-            's_id' => $school_id,
-            'status' => 'true',
-            'type' => 'Calendar'
-        );
-
-        $personal_course_id = $this->courses_model->save_course_record_other($default_personal);
-
-        $default_personal['co_id'] = $personal_course_id;
-
-        $data_school_arr['default_personal'] = $default_personal;
-
-
-        // ///// admin calender
-        // ///assigning calender to school admin to manage
-
-        $this->users_model->add_inst_with_course($course_id, $user_id, '0');
-
-        // ///assigning calender to school admin to manage
-        // /////Go with other default functionality roles
-
-        $this->default_funtionality($school_id, $this->input->post('s_type'));
-
-        // /////////////
-        $this->load->library('pagination');
-
-        $config ['base_url'] = base_url() . index_page() . '/sadmin/mng_schools';
-
-        $config ['total_rows'] = $this->sadmin_model->static_count_schools();
-
-        $config ['per_page'] = 10;
-
-        $config ["uri_segment"] = 3;
-
-        $this->pagination->initialize($config);
-
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
-        $data_send ['schools'] = $this->sadmin_model->get_all_schools($config ["per_page"], $page);
-
-        // $array_data['comefrom'] = 'page';
-        $data_send ['comefrom'] = 'ajax';
-
-        $data_send ['page'] = 'mng_schools';
-
-        if ($page == 'First') {
-            $data_send ['i'] = 1;
-        } else {
-            $data_send ['i'] = (10 * $page / 10) + 1;
-        }
-
-        $data_send ['schools'] = $this->sadmin_model->get_all_schools();
-
-        $final [] = array(
-            'user_id' => $user_id,
-            'event_type_name' => 'School event',
-            'event_data_default' => '{"name":"School event","location":"","start_time":"","end_time":"","notes":""}',
-            'event_data_custom' => '{"Name":"","Location":"","Start time":"","End time":"","Event Notes":""}',
-            'event_data_types' => '["text","text","text","text","textarea","text","text","text","text","text","time_picker","text","time_picker","text","textarea"]',
-            'event_data_uploads' => '[]'
-        );
-
-        foreach ($final as $perfinal_default_types) {
-            $this->users_model->remove_and_delete($perfinal_default_types);
-            $this->users_model->save_default_types($perfinal_default_types);
-        }
-
-        /*
-         *
-         */
-
-        $this->default_additional_actions($school_id, $data_school);
-
-        /* For makin DB Related Activity for new school */
-
-        $db_name = DATABASE_NAME_PREFIX . $data ['school_subdomain'];
-        $this->create_db_new($data_school_arr, $db_name);
-
-        $sql_db = "USE " . $db_name;
-        if ($this->db->simple_query($sql_db)) {
-            $school_id = $this->sadmin_model->save_school_record($data_school_arr['school_data']);
-            $user_id = $this->users_model->save_user_login($data_school_arr['login_data']);
-            $cookie = array(
-                'name' => 'Login_user_id',
-                'value' => $user_id,
-                'expire' => '86500',
-                'domain' => "admin." . $_SERVER['HTTP_HOST']
-            );
-            $this->input->set_cookie($cookie);
-            $course_id = $this->courses_model->save_course_record_other($data_school_arr['default_course']);
-            $personal_course_id = $this->courses_model->save_course_record_other($data_school_arr['default_personal']);
-            $this->users_model->add_inst_with_course($course_id, $user_id, '0');
-
-//            $this->default_funtionality($school_id, $this->input->post('s_type'));
-
-            foreach ($final as $perfinal_default_types) {
-                $this->users_model->remove_and_delete($perfinal_default_types);
-                $this->users_model->save_default_types($perfinal_default_types);
-            }
-
-            $this->default_additional_actions($school_id, $data_school);
-
-            $sql_db = "USE " . DATABASE_STRUCTURE;
-            if ($this->db->simple_query($sql_db)) {
-                
-            }
-        }
-
-        /* For makin DB Related Activity for new school */
-
-        if ($this->input->post('page') == 'page') {
-            echo 'saved';
-        } else {
-
-            $this->load->view('sadmin/mng_schools', $data_send);
-        }
-    }
-
-    /*
-     * Add default payments
-     */
-
-    // /////update school information
-    function update_student_go() {
-
-
-        $this->load->model('users_model');
-
-        $data_send = array();
-
-        $data ['school_username'] = $this->input->post('school_username');
-
-        if ($this->input->post('school_password') != '') {
-            $data ['school_password'] = md5($this->input->post('school_password'));
-        }
-        $data ['status'] = $this->input->post('status');
-        $data ['date_time'] = date_time_helper_current_date();
-        $data ['school_email'] = $this->input->post('school_email');
-        $data ['type'] = $this->input->post('s_type');
-
-        $id = $this->input->post('id');
-
-        $resultant = $this->users_model->get_school_record($id);
-        $rec_id = '';
-        $per_id = '';
-        $USer_id = '';
-        $USer_role = '';
-
-        foreach ($resultant as $manag_arr) {
-            $USer_id = $manag_arr ['id'];
-            $USer_role = $manag_arr ['role_name'];
-        }
-
-        if ($this->input->post('s_type') != $USer_role) {
-
-            $this->users_model->update_existing_record($data ['type'], $USer_id);
-            // get role id of main super admin role type to get its permission
-            $resultat = $this->users_model->get_record_main($data ['type']);
-
-            foreach ($resultat as $manag_arry) {
-                $rec_id = $manag_arry ['id'];
-            }
-
-            $result = $this->users_model->get_permission_ofskool($rec_id);
-            $core = '';
-            foreach ($result as $manag) {
-                $per_id = $manag ['permission_array'];
-                $core = $manag ['permission_core'];
-            }
-
-            $data_array ['permission_array'] = $per_id;
-            $data_array ['admin_permissions'] = '';
-            $data_array ['permission_core'] = $core;
-            if ($data_array ['permission_array'] != 'false')
-                $this->users_model->update_school_permisions($data_array, $USer_id);
-
-            $rest = array();
-            $temp = array();
-            // retrieve all roles existig in this school
-            $rest = $this->sadmin_model->retrieve_school_roles($id);
-            if (!empty($rest)) {
-
-                foreach ($rest as $get_rest) {
-                    $temp [] = $get_rest ['id'];
-                }
-
-                $i = 0;
-                $dataarray = array();
-                for ($i; $i < count($temp); $i++) {
-
-                    $dataarray ['permission_array'] = $per_id;
-                    $dataarray ['admin_permissions'] = $per_id;
-                    $res = $this->sadmin_model->update_school_roles($dataarray, $temp [$i]);
-                }
-            }
-        }
-        // also update all roles existing in this school
-
-        $res = $this->sadmin_model->update_school_record($data, $id);
-
-        $data_send ['schools'] = $this->sadmin_model->get_all_schools('', '');
-
-        $data_send ['comefrom'] = 'page';
-
-        $data_send ['page'] = 'mng_schools';
-
-        $data_send ['comefrom'] = 'ajax';
-
-        $this->load->view('sadmin/mng_schools', $data_send);
-    }
+    
 
 
     public function saveperuser() {
@@ -1841,51 +1878,13 @@ class Sadmin extends CI_Controller {
     function register_check_duplicate() {
 
         $data = array();
+        $data ['lg_email'] = $this->input->post('student_email');
 
-
-        $data ['name'] = $this->input->post('name');
-        $data ['school_username'] = $this->input->post('username');
-        $data ['school_subdomain'] = $this->input->post('domainname');
-        $data ['school_email'] = $this->input->post('school_email');
-
-        $res = $this->sadmin_model->check_school_duplicate($data);
+        $res = $this->sadmin_model->check_student_duplicate($data);
 
         echo json_encode($res);
     }
 
-    function check_student_name() {
-        $this->check();
-
-        $data = array();
-
-
-        $data ['name'] = $this->input->post('name');
-        $data ['username'] = $this->input->post('username');
-        $data ['domainname'] = $this->input->post('domainname');
-
-        $res = $this->sadmin_model->check_school_record($data);
-
-        // checking for school username
-
-        if ($res) {
-            echo 'false';
-            die();
-        }
-
-        $username = $this->sadmin_model->check_school_username($data);
-
-        if ($username) {
-            echo 'false';
-            die();
-        }
-
-        $domainname = $this->sadmin_model->check_school_domainname($data);
-
-        if ($domainname) {
-            echo 'false';
-            die();
-        }
-    }
 
   
     function reset_password_request() {

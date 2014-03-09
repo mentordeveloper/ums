@@ -16,65 +16,10 @@
         /* $('#myTab a[href="#'+$('#tab_pick').val()+'"]').tab('show'); */
         $('.content .msgsuccess').slideUp(5000);
     });
-    function validate_form() {
-
-        var myresult = $("#school_form").validate({
-            rules: {
-                school_name: {
-                    required: true,
-                },
-                sub_dname: {
-                    required: true,
-                    noSpace: true,
-                    lettersonly: true,
-                },
-                school_username: {
-                    noSpace: true,
-                    required: true,
-                },
-                school_password: {
-                    noSpace: true,
-                    required: true,
-                    minlength: 5,
-                },
-                school_email: {
-                    required: true,
-                    email: true,
-                },
-                role: {
-                    required: true,
-                },
-            },
-            messages: {
-                school_name: {required: "Please enter School Name",
-                },
-                sub_dname: {
-                    required: "Please enter Subdomain Name",
-                    noSpace: "There should be no space",
-                    lettersonly: "Please enter only letters or numbers",
-                },
-                school_username: "Please enter valid School User Name",
-                school_password: {
-                    required: "Please provide valid Password",
-                    minlength: "Should be more than 4 characters",
-                },
-                school_email: {
-                    required: "Please enter Email Address",
-                    email: "Please enter valid Email Address",
-                },
-                role: {
-                    required: "Please select School type",
-                },
-            }
-        }).form();
-
-        if (myresult) {
-            add_school_call();
-        }
-
-    }
+    
 
 </script>
+
 <?php if (isset($comefrom) && $comefrom != 'ajax') { ?>
 
     <div class="maincontent noright">
@@ -86,7 +31,7 @@
 
             <?php } ?>
             <span id="html_ajax">
-                <form id="add_user" action="<?php echo site_url(); ?>/sadmin/save_student" method="post" class="stdform">
+                <form id="add_user" action="<?php echo site_url(); ?>/sadmin/save_student" method="post" class="stdform" enctype="multipart/form-data">
                     <table  cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable" class="table table-hover table-bordered table-full-width">
                         <tr>
                             <td colspan="2" style="padding: 0px;">
@@ -101,7 +46,7 @@
                             <td><strong>Admission ID</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
-                                        <input placeholder="Enter Admission ID" class="m-wrap large" type="text" id="roll_num" name="roll_num" value="<?php echo $this->session->flashdata('roll_num'); ?>" />
+                                        <input placeholder="Enter Admission ID" readonly="" class="m-wrap large" type="text" id="addmission_id" name="addmission_id" value="<?php echo $addmission_id; ?>" />
                                     </div>
                                 </div>
                             </td>
@@ -134,6 +79,9 @@
                                                class="m-wrap large" type="text" id="lg_fname"
                                                name="lg_fname"
                                                value="<?php echo $this->session->flashdata('lg_fname'); ?>" />
+                                        <script language="JavaScript" type="text/javascript"> 
+                                            makeUrduEditor('lg_fname', 12);                      
+                                        </script>
 
                                     </div>
                                 </div>
@@ -154,7 +102,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="display: none;">
                             <td><strong>Login Username</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
@@ -165,7 +113,7 @@
                                     </div>
                                 </div></td>
                         </tr>
-                        <tr>
+                        <tr style="display: none;">
                             <td><strong>Password</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
@@ -191,8 +139,8 @@
                             <td><strong>Gender</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
-                                        <input class="m-wrap large" type="radio" checked="" name="gender" /> Male
-                                        <input class="m-wrap large" type="radio" name="gender" /> FeMale
+                                        <input class="m-wrap large" value="male" type="radio" checked="" name="gender" /> Male
+                                        <input class="m-wrap large" value="female" type="radio" name="gender" /> FeMale
                                     </div>
                                 </div></td>
                         </tr>
@@ -200,8 +148,8 @@
                             <td><strong>Financial Category</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
-                                        <input class="m-wrap large" type="radio" checked="" name="fin_cate" /> Libyan
-                                        <input class="m-wrap large" type="radio" name="fin_cate" /> Foreign National
+                                        <input class="m-wrap large" value="libyan" type="radio" checked="" name="fin_cate" /> Libyan
+                                        <input class="m-wrap large" value="foreigner" type="radio" name="fin_cate" /> Foreign National
                                     </div>
                                 </div></td>
                         </tr>
@@ -238,7 +186,17 @@
                             <td><div class="control-group">
                                     <div class="controls">
                                         <select class="m-wrap large" name="nationality" id="nationality" >
-                                            <option value="">Select Nationality</option>
+                                            <option value="" >Select Nationality</option>
+                                            <?php 
+                                                if(is_array($countries)){
+                                                    foreach ($countries as $key=>$country){
+                                                        $sel = '';
+                                                        if($country['country_id']==121)
+                                                            $sel = 'selected="selected"';
+                                                        echo '<option value="'.str_replace(" ", "_", $country['country_name']).'" '.$sel.'>'.ucwords($country['country_name']).'</option>';
+                                                    }
+                                                }
+                                            ?>
 
                                         </select>
                                     </div>
@@ -259,7 +217,8 @@
                             <td><div class="control-group">
                                     <div class="controls">
                                         <select class="m-wrap large" name="add_cate" id="add_cate" >
-                                            <option value="">Select Addmission Category</option>
+                                            <option value="1">Select Addmission Category</option>
+                                            
 
                                         </select>
                                     </div>
@@ -284,38 +243,34 @@
                                     </div>
                                 </div></td>
                         </tr>
-                        <tr id="blood_grp" style="display: none;">
-                            <td><strong><font style="color: black">Blood Group</font></strong></td>
+                        <tr>
+                            <td><strong>Transportation</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
-                                        <select class="m-wrap large" name="blood_grp" id="blood_grp" onchange="get_grade_section(this.options[this.selectedIndex].value, this.options[this.selectedIndex].text);">
-                                            <option value="0">Select Grade</option>
-                                            <?php
-                                            if (sizeof($grades_data) > 0) {
-                                                foreach ($grades_data as $key => $row) {
-                                                    ?>
-                                                    <option value="<?php echo $row['g_id']; ?>"><?php echo $row['name']; ?></option>
-                                                    <?
-                                                }
-                                            }
-                                            ?> 
-                                        </select>
-                                        <input type="hidden" name="grade_name_hidden" id="grade_name_hidden" value="" />
+                                        <input class="m-wrap large" value="yes" type="radio" name="transportation" /> Yes
+                                        <input class="m-wrap large" value="no" type="radio" checked=""  name="transportation" /> No
                                     </div>
                                 </div></td>
-
                         </tr>
-                        <tr id="section_tr" style="display: none;">
-                            <td><strong><font style="color: black">Section</font></strong></td>
+                        <tr>
+                            <td><strong>Accommodation</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
-                                        <select class="m-wrap large" name="section_name" id="section_name" onchange="section_change();" >
-                                            <option value="0">Select Section</option>
-                                        </select>
+                                        <input class="m-wrap large" value="yes" type="radio" name="accommodation" /> Yes
+                                        <input class="m-wrap large" value="no" type="radio" checked=""  name="accommodation" /> No
                                     </div>
                                 </div></td>
-
                         </tr>
+                         <tr>
+                            <td><strong>English Name</strong></td>
+                            <td><div class="control-group">
+                                    <div class="controls">
+                                        <input   type="text" placeholder="Enter English Name" id="eng_name" name="eng_name"
+                                                 value="<?php echo $this->session->flashdata('eng_name'); ?>" /> 
+                                    </div>
+                                </div></td>
+                        </tr>
+                        
 
                     </table>
                     <hr>
@@ -373,7 +328,7 @@
                                 </div></td>
                         </tr>
                         <tr>
-                            <td><strong>Barcode Number</strong></td>
+                            <td><strong>Bar code Number</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
                                         <input placeholder="Barcode Number" class="m-wrap large" type="text" readonly="" id="bar_num" name="bar_num" value="<?php echo $this->session->flashdata('bar_num'); ?>" />
@@ -448,6 +403,16 @@
                                     <div class="controls">
                                         <select name="country" id="country" >
                                             <option value="">Select Country</option>
+                                            <?php 
+                                                if(is_array($countries)){
+                                                    foreach ($countries as $key=>$country){
+                                                        $sel = '';
+                                                        if($country['country_id']=='121')
+                                                            $sel = 'selected="selected"';
+                                                        echo '<option value="'.str_replace(" ", "_", $country['country_name']).'"   '.$sel.'>'.ucwords($country['country_name']).'</option>';
+                                                    }
+                                                }
+                                            ?>
 
                                         </select>
                                     </div>
@@ -501,28 +466,110 @@
                         <tr>
                             <td colspan="2" style="padding: 0px;">
                                 <div class="contenttitle radiusbottom0">
-                                    <h2 class="table"><span>Contact Detail</span></h2>
+                                    <h2 class="table"><span>Parent: Personal Detail</span></h2>
                                 </div>
                             </td>
 
                         </tr>
                         <tr>
-                            <td><strong>Address Line 1</strong></td>
+                            <td><strong>First Name</strong></td>
                             <td>
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input type="text" placeholder="Enter Address Info 1" id="address1" name="address1" value="<?php echo $this->session->flashdata('address1'); ?>" />
+                                        <input type="text" placeholder="Enter Parent First Name" id="par_fname" name="par_fname" value="<?php echo $this->session->flashdata('par_fname'); ?>" />
                                     </div>
                                 </div>
 
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>Address Line 2</strong></td>
+                            <td><strong>Last Name</strong></td>
                             <td>
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input type="text" placeholder="Enter Address Info 2" id="address2" name="address2" value="<?php echo $this->session->flashdata('address2'); ?>" />
+                                        <input type="text" placeholder="Enter Parent Last Name" id="par_lname" name="par_lname" value="<?php echo $this->session->flashdata('par_lname'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Relation</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Your Relation" id="par_relation" name="par_relation" value="<?php echo $this->session->flashdata('par_relation'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date of Birth</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Parent DOB" id="par_dob" name="par_dob" value="<?php echo $this->session->flashdata('par_dob'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Education</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Education" id="par_education" name="par_education" value="<?php echo $this->session->flashdata('par_education'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Occupation</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Parent Occupation" id="par_occupation" name="par_occupation" value="<?php echo $this->session->flashdata('par_occupation'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>                    
+                    <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable">
+                        <tr>
+                            <td colspan="2" style="padding: 0px;">
+                                <div class="contenttitle radiusbottom0">
+                                    <h2 class="table"><span>Parent: Contact Detail</span></h2>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Parent Email" id="par_email" name="par_email" value="<?php echo $this->session->flashdata('par_email'); ?>" />
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Address Line 1</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Parent Address 1" id="par_address1" name="par_address1" value="<?php echo $this->session->flashdata('par_address1'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Address line 2</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Address 2" id="par_address2" name="par_address2" value="<?php echo $this->session->flashdata('par_address2'); ?>" />
                                     </div>
                                 </div>
                             </td>
@@ -532,7 +579,7 @@
                             <td>
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input type="text" placeholder="Enter City Name" id="city" name="city" value="<?php echo $this->session->flashdata('city'); ?>" />
+                                        <input type="text" placeholder="Enter Parent City" id="par_city" name="par_city" value="<?php echo $this->session->flashdata('par_city'); ?>" />
                                     </div>
                                 </div>
                             </td>
@@ -542,17 +589,7 @@
                             <td>
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input type="text" placeholder="Enter State Name" id="state" name="state" value="<?php echo $this->session->flashdata('state'); ?>" />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Pin Code</strong></td>
-                            <td>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <input type="text" placeholder="Enter Pin Code" id="pin_code" name="pin_code" value="<?php echo $this->session->flashdata('pin_code'); ?>" />
+                                        <input type="text" placeholder="Enter State" id="par_state" name="par_state" value="<?php echo $this->session->flashdata('par_state'); ?>" />
                                     </div>
                                 </div>
                             </td>
@@ -561,8 +598,18 @@
                             <td><strong>Country</strong></td>
                             <td><div class="control-group">
                                     <div class="controls">
-                                        <select name="country" id="country" >
+                                        <select name="par_country" id="par_country" >
                                             <option value="">Select Country</option>
+                                            <?php 
+                                                if(is_array($countries)){
+                                                    foreach ($countries as $key=>$country){
+                                                        $sel = '';
+                                                        if($country['country_id']=='121')
+                                                            $sel = 'selected="selected"';
+                                                        echo '<option value="'.str_replace(" ", "_", $country['country_name']).'"   '.$sel.'>'.ucwords($country['country_name']).'</option>';
+                                                    }
+                                                }
+                                            ?>
 
                                         </select>
                                     </div>
@@ -570,11 +617,21 @@
 
                         </tr>
                         <tr>
-                            <td><strong>Phone</strong></td>
+                            <td><strong>Phone 1</strong></td>
                             <td>
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input type="text" placeholder="Enter Home Phone Number" id="phone" name="phone" value="<?php echo $this->session->flashdata('phone'); ?>" />
+                                        <input type="text" placeholder="Enter Home Phone" id="par_phone1" name="par_phone1" value="<?php echo $this->session->flashdata('par_phone1'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phone 2</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Phone 2" id="par_phone2" name="par_phone2" value="<?php echo $this->session->flashdata('par_phone2'); ?>" />
                                     </div>
                                 </div>
                             </td>
@@ -584,35 +641,74 @@
                             <td>
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input type="text" placeholder="Enter Mobile Phone Number" id="m_phone" name="m_phone" value="<?php echo $this->session->flashdata('m_phone'); ?>" />
+                                        <input type="text" placeholder="Enter Parent Mobile" id="par_mobile" name="par_mobile" value="<?php echo $this->session->flashdata('par_mobile'); ?>" />
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td><strong>Email</strong></td>
-                            <td>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <input type="text" placeholder="Enter Email Address" id="lg_email" name="lg_email" value="<?php echo $this->session->flashdata('lg_email'); ?>" />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>User Photo</strong></td>
-                            <td>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <input type="file" id="lg_img" name="lg_img"  />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
                     </table>
-                    
-                    
+                    <hr>                    
+                    <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable">
+                        <tr>
+                            <td colspan="2" style="padding: 0px;">
+                                <div class="contenttitle radiusbottom0">
+                                    <h2 class="table"><span>Previous Educational Details</span></h2>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td><strong>Institution Name</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Institutaion Name" id="ed_ins_name" name="ins_name" value="<?php echo $this->session->flashdata('ins_name'); ?>" />
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Course</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Course Name" id="ed_course" name="ed_course" value="<?php echo $this->session->flashdata('ed_course'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Year</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Completion Year" id="ed_year" name="ed_year" value="<?php echo $this->session->flashdata('ed_year'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Marks</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Total Marks" id="ed_total_marks" name="ed_total_marks" value="<?php echo $this->session->flashdata('ed_total_marks'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Grade</strong></td>
+                            <td>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="text" placeholder="Enter Total Grade Yield" id="ed_total_grade" name="ed_total_grade" value="<?php echo $this->session->flashdata('ed_total_grade'); ?>" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                     
                     <table cellpadding="0" cellspacing="0" border="0" class="stdtable" id="dyntable">
                         <tr>
@@ -627,6 +723,7 @@
                 </form>
             </span>
             <input type="hidden" id="added_school" href="#school" />
+            <input type="hidden" id="site_url" value="<?php echo site_url();?>/"/>
             <div style="display:none;">
                 <div id="school"> </div>
             </div>

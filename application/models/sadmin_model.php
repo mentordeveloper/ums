@@ -7,10 +7,27 @@ class Sadmin_model extends MY_model {
         // Call the Model constructor
         parent::__construct();
     }
-
-    function save_school_record($data) {
-        $this->db->insert('tbl_schools_data', $data);
+    
+    function save_student_record($data) {
+        $this->db->insert('tbl_student_detail', $data);
         return $this->db->insert_id();
+    }
+    function save_student_parent_record($data) {
+        $this->db->insert('tbl_student_parent_info', $data);
+        return $this->db->insert_id();
+    }
+    
+    function get_max_addmission_id(){
+        $this->db->select_max('st_addmission_id');
+        $query = $this->db->get('tbl_student_detail');
+
+//echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $array = $query->result_array();
+            return $array [0] ['st_addmission_id']+1;
+        } else {
+            return '1';
+        }
     }
 
     function add_category_new($name) {
@@ -26,8 +43,8 @@ class Sadmin_model extends MY_model {
     function get_school_id($name) {
 
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
-        $this->db->where('tbl_schools_data.school_subdomain', $name);
+        $this->db->from('tbl_student_detail');
+        $this->db->where('tbl_student_detail.school_subdomain', $name);
 
         $query = $this->db->get();
 
@@ -49,21 +66,21 @@ class Sadmin_model extends MY_model {
         return $result;
     }
 
-    function check_school_duplicate($data) {
+    function check_student_duplicate($data) {
 
         $keys = array();
 
         if (is_array($data)) {
 
             //get keys to check indexes to db
-            $keys = get_keys_array($data);
+            $keys = array_keys($data);
             $counter = 0;
             foreach ($data as $percondition) {
 
                 if (isset($keys[$counter])) {
 
                     $this->db->select('*');
-                    $this->db->from('tbl_schools_data');
+                    $this->db->from('tbl_login');
                     $this->db->where($keys[$counter], $percondition);
 
                     $query = $this->db->get();
@@ -89,7 +106,7 @@ class Sadmin_model extends MY_model {
 
     function search_school_by_email($condition) {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->like($condition);
 
         $query = $this->db->get();
@@ -104,7 +121,7 @@ class Sadmin_model extends MY_model {
 
     function get_school($condition, $data = false) {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->where($condition);
 
         $query = $this->db->get();
@@ -457,12 +474,12 @@ class Sadmin_model extends MY_model {
             'id' => $id
         );
 
-        return $this->db->update('tbl_schools_data', $data, $condition);
+        return $this->db->update('tbl_student_detail', $data, $condition);
     }
 
     function update_school_verification($data, $condition) {
 
-        return $this->db->update('tbl_schools_data', $data, $condition);
+        return $this->db->update('tbl_student_detail', $data, $condition);
     }
 
     function update_faq_record($data, $id) {
@@ -712,7 +729,7 @@ class Sadmin_model extends MY_model {
         $removed_login = $this->remove_login_data($id, $role);
 
         if ($removed_login) {
-            return $this->db->delete('tbl_schools_data', $condition);
+            return $this->db->delete('tbl_student_detail', $condition);
         } else {
             return false;
         }
@@ -723,7 +740,7 @@ class Sadmin_model extends MY_model {
         // ////this login is to remove the user login of the school admin if the
         // school is entirely removed which manages school/university calender
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->where('id', $id);
 
         $query = $this->db->get();
@@ -765,11 +782,11 @@ class Sadmin_model extends MY_model {
         } else {
             $this->db->select($getonly);
         }
-        $this->db->from('tbl_schools_data');
-        $this->db->join('tbl_about', 'tbl_about.id=tbl_schools_data.id', 'left');
-        $this->db->join('tbl_login', 'tbl_login.lg_email=tbl_schools_data.school_username', 'left');
-        $this->db->join('tbl_settings_school', 'tbl_schools_data.id=tbl_settings_school.s_id', 'left');
-        $this->db->where('tbl_schools_data.school_subdomain', $name);
+        $this->db->from('tbl_student_detail');
+        $this->db->join('tbl_about', 'tbl_about.id=tbl_student_detail.id', 'left');
+        $this->db->join('tbl_login', 'tbl_login.lg_email=tbl_student_detail.school_username', 'left');
+        $this->db->join('tbl_settings_school', 'tbl_student_detail.id=tbl_settings_school.s_id', 'left');
+        $this->db->where('tbl_student_detail.school_subdomain', $name);
 
         $query = $this->db->get();
 
@@ -800,7 +817,7 @@ class Sadmin_model extends MY_model {
 
     function check_school_username($data) {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->where('school_username', $data ['username']);
 
         $query = $this->db->get();
@@ -815,7 +832,7 @@ class Sadmin_model extends MY_model {
     function check_school_record($data) {
 
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->where('school_subdomain', $data ['name']);
 
         $query = $this->db->get();
@@ -833,7 +850,7 @@ class Sadmin_model extends MY_model {
 
     function check_school_domainname($data, $record = false) {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->where('school_subdomain', $data ['domainname']);
         $query = $this->db->get();
 
@@ -893,7 +910,7 @@ class Sadmin_model extends MY_model {
 
     function get_school_byid($id) {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->where('id', $id);
 
         $query = $this->db->get();
@@ -937,7 +954,7 @@ class Sadmin_model extends MY_model {
 
     function static_count_allskools() {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $query = $this->db->get();
 
         return $query->num_rows();
@@ -945,7 +962,7 @@ class Sadmin_model extends MY_model {
 
     function get_all_schools($limit = '', $start = '') {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
         $this->db->order_by('id', 'desc');
 
         if (!empty($limit)) {
@@ -1200,7 +1217,7 @@ class Sadmin_model extends MY_model {
 
     function static_count_schools() {
         $this->db->select('*');
-        $this->db->from('tbl_schools_data');
+        $this->db->from('tbl_student_detail');
 
         $query = $this->db->get();
 
@@ -1239,7 +1256,17 @@ class Sadmin_model extends MY_model {
         $this->db->insert('tbl_notification', $data);
         return $this->db->insert_id();
     }
+    
+    
+    //get country info
+    function get_all_countries($data=''){
+        $this->db->select('*');
+        $this->db->from('tbl_countries');
 
+        $query = $this->db->get();
+        $result = $query->result_array();
+        return $result;
+    }
 }
 
 ?>

@@ -7,6 +7,7 @@ if(!isset($css_files))
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<title><?php if(isset($title)) echo $title;?></title>    
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?=link_tag('themes/starlight/css/style.css');?>
 <!--[if IE 9]>
@@ -41,6 +42,11 @@ if(!isset($css_files))
 <style>
     .theme{display: none;}
 </style>
+<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>files/Scripts/UrduEditor.js"></script>
+<script language="JavaScript" type="text/javascript">
+   initUrduEditor("http://www.urduhome.net/");
+</script>
+
 </head>
 <body class="loggedin">
 <script src="<?php echo base_url('files/date_picker/js/jquery-1.8.2.min.js') ?>" type="text/javascript"></script>
