@@ -571,19 +571,22 @@ class Sadmin extends CI_Controller {
         $array_data ['js_files'] = array(
 //            base_url('files/calender/src/_loader.js'),
             base_url('files/date_picker/js/jquery-ui-1.8.24.custom.min.js'),
-//            base_url('js/knockout-latest.js'),
-//            base_url('js/instructor.calendar.subscriptions.ko.js'),
-//            base_url('js/instructor.calendar.export.ko.js'),
-            base_url('js/jax.js'),
-            base_url('js/extended.modal.jquery.js'),
-            base_url('js/extended.alert.js'),
-            base_url('js/jaxhandler.js'),
             base_url('files/fancybox/fancybox/jquery.mousewheel-3.0.4.pack.js'),
             base_url('files/fancybox/fancybox/jquery.fancybox-1.3.4.pack.js'),
-            base_url('files/jquery_masking/masking.js'),
-            base_url('files/uploadify/jquery.uploadify.min.js'),
             base_url('files/js/jquery_validation.js'),
             base_url('js/sadmin.index.js'),
+            base_url('files/jquery_image_upload/js/vendor/jquery.ui.widget.js'),
+            base_url('files/jquery_image_upload/js/tmpl.min.js'),
+            base_url('files/jquery_image_upload/js/load-image.min.js'),
+            base_url('files/jquery_image_upload/js/canvas-to-blob.min.js'),
+            base_url('files/jquery_image_upload/js/bootstrap.min.js'),
+            base_url('files/jquery_image_upload/js/jquery.fileupload.js'),
+            base_url('files/jquery_image_upload/js/jquery.fileupload-process.js'),
+            base_url('files/jquery_image_upload/js/jquery.fileupload-image.js'),
+            base_url('files/jquery_image_upload/js/jquery.fileupload-validate.js'),
+            base_url('files/jquery_image_upload/js/jquery.fileupload-ui.js'),
+            base_url('files/jquery_image_upload/js/main.js'),
+            
 //            base_url('themes/starlight/js/plugins/jquery.dataTables.min.js'),
 //            base_url('themes/starlight/js/custom/tables.js')
         );
@@ -603,11 +606,28 @@ class Sadmin extends CI_Controller {
         $this->load->view('sadmin/base', $array_data);
     }
     
+    function save_user_image(){
+            $admission_id = $this->input->post('admission_id');
+//            printr($_FILES);exit;
+//            $image_name = $_FILES[''];exit;
+            $base_path = './files/user_management/'.$admission_id;
+            global $folder_path;
+            $folder_path = 'user_management/'.$admission_id;
+//printr($this->input->post());
+            // creat base_dir as user_id to hold attachments
+            if (!is_dir($base_path)) {
+//                mkdir($base_path);
+                mkdir($base_path);
+            } 
+            $this->load->library('UploadHandler');
+            $upload_handler = new UploadHandler();
+
+    }
     function save_student() {
         $this->load->model('users_model');
     
         $data_send = array();
-//printr($this->input->post());
+printr($this->input->post());
         $data_student_arr = array();
 
         '[addmission_id] => 1
