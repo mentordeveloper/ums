@@ -34,7 +34,7 @@ class UploadHandler
     function __construct($options = null, $initialize = true, $error_messages = null) {
         global $folder_path;
         $this->options = array(
-            'script_url' => $this->get_full_url().'/',
+            'script_url' => $this->get_full_url().'/index.php/sadmin/save_user_image',
 //            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/',
 //            'upload_url' => $this->get_full_url().'/files/',
             'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/'.$folder_path.'/',
@@ -1096,6 +1096,7 @@ class UploadHandler
     protected function generate_response($content, $print_response = true) {
         if ($print_response) {
             $json = json_encode($content);
+//            echo $json;exit;
             $redirect = isset($_REQUEST['redirect']) ?
                 stripslashes($_REQUEST['redirect']) : null;
             if ($redirect) {
@@ -1112,7 +1113,7 @@ class UploadHandler
                     ));
                 }
             }
-            $this->body($json);
+            $this->body($json);exit;
         }
         return $content;
     }
@@ -1292,10 +1293,10 @@ class UploadHandler
                 $content_range
             );
         }
-        return $this->generate_response(
+        return str_replace(" ","",$this->generate_response(
             array($this->options['param_name'] => $files),
             $print_response
-        );
+        ));
     }
 
     public function delete($print_response = true) {
@@ -1305,12 +1306,14 @@ class UploadHandler
         }
         $response = array();
         foreach($file_names as $file_name) {
-            $file_path = $this->get_upload_path($file_name);
+            echo 'filePath: '.$file_path = $this->get_upload_path($file_name);
+            exit;
             $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
             if ($success) {
                 foreach($this->options['image_versions'] as $version => $options) {
                     if (!empty($version)) {
                         $file = $this->get_upload_path($file_name, $version);
+                        echo 'file'.$file;exit;
                         if (is_file($file)) {
                             unlink($file);
                         }

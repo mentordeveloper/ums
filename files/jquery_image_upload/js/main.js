@@ -22,6 +22,8 @@ $(function () {
             'admission_id': $('#addmission_id').val(),
         },
         url: $('#site_url').val() + "sadmin/save_user_image",
+        maxFileSize: 5000000,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
     });
 
     // Enable iframe cross-domain access via redirect option:

@@ -20,11 +20,9 @@
 
 </script>
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>files/jquery_image_upload/css/bootstrap.min.css">
 <!-- Generic page styles -->
 <link rel="stylesheet" href="<?php echo base_url(); ?>files/jquery_image_upload/css/style.css">
-<!-- blueimp Gallery styles -->
-<link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
 <link rel="stylesheet" href="<?php echo base_url(); ?>files/jquery_image_upload/css/jquery.fileupload.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>files/jquery_image_upload/css/jquery.fileupload-ui.css">
@@ -470,7 +468,7 @@
                                         <span class="btn btn-success fileinput-button">
                                             <i class="glyphicon glyphicon-plus"></i>
                                             <span>Add files...</span>
-                                            <input type="file"  name="files[]" multiple>
+                                            <input type="file"  name="files" id="files" >
                                         </span>
                                         <!-- The global file processing state -->
                                         <span class="fileupload-process"></span>
