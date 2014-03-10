@@ -52,6 +52,7 @@ if(!isset($css_files))
 <script src="<?php echo base_url('files/date_picker/js/jquery-1.8.2.min.js') ?>" type="text/javascript"></script>
 <? $this->load->view('sadmin/header'); ?>
 <? $this->load->view($template); ?>
+<input type="hidden" id="site_url" value="<?php echo site_url();?>/"/>
 <? $this->load->view('common/scripts') ?>
 <? $this->load->view('common/for_js') ?>
 <script type="text/javascript">

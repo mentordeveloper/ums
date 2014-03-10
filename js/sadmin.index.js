@@ -674,24 +674,9 @@ function create_language_folder()
     });
 
 }
-function update_school(id)
+function update_student(id)
 {
-
-    $.ajax({
-        url: $('#site_url').val() + "sadmin/update_school",
-        type: "GET",
-        context: document.body,
-        data: "id=" + id,
-        cache: false,
-        success: function(data) {
-
-            $('#school').html(data);
-            $("#added_school").fancybox().trigger('click');
-
-        }
-
-    });
-
+    window.location = $('#site_url').val() + '/sadmin/update_student?id='+id;
 }
 
 
@@ -751,14 +736,13 @@ function check_name_duplication()
                             $('#school').html('<div class="notification msgsuccess"><p>Record Saved!</p></div>');
                             $("#added_school").fancybox().trigger('click');
 
-                            $('#html_ajax').html(data);
 
                             setTimeout(function() {
+                                window.location = $('#site_url').val() + 'sadmin/mng_students';
                                 $.fancybox.close();
                             }, 1300);
 
-                            jQuery('#dyntable').dataTable({"bDestroy": true, "sPaginationType": "full_numbers"});
-
+                            
                         }
 
                     }
@@ -834,7 +818,7 @@ function update_school_call(id)
 }
 
 
-function remove_school(id, schoolname)
+function remove_student(id, schoolname)
 {
 
 
@@ -870,10 +854,10 @@ function push_call_confirm(id)
 {
 
     $.ajax({
-        url: $('#site_url').val() + "sadmin/remove_school",
+        url: $('#site_url').val() + "sadmin/remove_student",
         type: "GET",
         context: document.body,
-        data: "remove_school=" + id,
+        data: "remove_student=" + id,
         cache: false,
         success: function(data) {
 

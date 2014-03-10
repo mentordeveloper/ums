@@ -554,7 +554,7 @@ class Sadmin extends CI_Controller {
 
         $array_data ['session'] = $this->login_credentials_get();
 
-        $array_data ['students'] = array();//$this->sadmin_model->get_all_schools();
+        $array_data ['students'] = $this->sadmin_model->get_all_students();
 
         $array_data ['comefrom'] = 'page';
 
@@ -565,7 +565,6 @@ class Sadmin extends CI_Controller {
 
     function new_student() {
         $this->load->model('users_model');
-//        $array_data['schools_type'] = $this->users_model->get_skool_type('', '');
         $this->check();
 
         $array_data ['js_files'] = array(
@@ -594,6 +593,7 @@ class Sadmin extends CI_Controller {
         $array_data ['session'] = $this->login_credentials_get();
 
         $array_data ['addmission_id'] = $this->sadmin_model->get_max_addmission_id();
+        $this->session->set_userdata("addmission_id",$array_data ['addmission_id']);
         $array_data ['students'] = array();//$this->sadmin_model->get_all_schools();
         $array_data ['countries'] = $this->sadmin_model->get_all_countries();
 
@@ -607,7 +607,11 @@ class Sadmin extends CI_Controller {
     }
     
     function save_user_image(){
-            $admission_id = $this->input->post('admission_id');
+
+            $admission_id = $this->input->get_post('admission_id');
+//            echo $admission_id = $this->input->post('admission_id');
+            if(empty($admission_id))
+                $admission_id = $this->input->get('admission_id');
 //            printr($_FILES);exit;
 //            $image_name = $_FILES[''];exit;
             $base_path = './files/user_management/'.$admission_id;
@@ -627,61 +631,10 @@ class Sadmin extends CI_Controller {
         $this->load->model('users_model');
     
         $data_send = array();
-printr($this->input->post());
+//printr($this->input->post());
         $data_student_arr = array();
 
-        '[addmission_id] => 1
-        [add_date] => 03-10-2014
-        [lg_fname] => ندفالسج
-        [lg_lname] => sadjla
-        [lg_username] => admin
-        [lg_password] => allah1@
-        [dob] => 03-10-2014
-        [gender] => male
-        [fin_cate] => libyan
-        [blood_group] => A+
-        [birth_place] => asda
-        [nationality] => Libyan_Arab_Jamahiriya
-        [mother_lang] => urdu
-        [add_cate] => 1
-        [religion] => Islam
-        [national_id] => 3520251426271
-        [transportation] => no
-        [accommodation] => no
-        [eng_name] => umair majeed
-        [faculty] => BIT
-        [year] => 2014
-        [batch] => Fall
-        [bar_num] => BIT_Fall_2014_1
-        [address1] => lahore
-        [address2] => lahore
-        [city] => lahore
-        [state] => punjab
-        [pin_code] => 54000
-        [country] => Libyan_Arab_Jamahiriya
-        [phone] => 54545454
-        [m_phone] => 455256625205
-        [lg_email] => mum@gmail.com
-        [par_fname] => abdul
-        [par_lname] => majeed
-        [par_relation] => Islam
-        [par_dob] => 343434
-        [par_education] => MA
-        [par_occupation] => Teaching
-        [par_email] => majeed@gamil.com
-        [par_address1] => lahore
-        [par_address2] => lhaore
-        [par_city] => lahore
-        [par_state] => punjab
-        [par_country] => Libyan_Arab_Jamahiriya
-        [par_phone1] => 349034043043
-        [par_phone2] => 9430304349309
-        [par_mobile] => 304349030949304
-        [ins_name] => PUCIT
-        [ed_course] => BSIT
-        [ed_year] => 2014
-        [ed_total_marks] => 4
-        [ed_total_grade] => 3.35';
+        
         
         $data_login = array();
         $data_login ['lg_fname'] = $this->input->post('lg_fname');
@@ -720,23 +673,7 @@ printr($this->input->post());
         $data_student['st_birth_place'] = $this->input->post('birth_place');
         $data_student['st_nationality'] = $this->input->post('nationality');
         $data_student['st_mother_tongue'] = $this->input->post('mother_lang');
-        '[add_cate] => 1
-        [religion] => Islam
-        [national_id] => 3520251426271
-        [transportation] => no
-        [accommodation] => no
-        [eng_name] => umair majeed
         
-        [address1] => lahore
-        [address2] => lahore
-        [city] => lahore
-        [state] => punjab
-        [pin_code] => 54000
-        [country] => Libyan_Arab_Jamahiriya
-        [phone] => 54545454
-        [m_phone] => 455256625205
-        [lg_email] => mum@gmail.com
-        ';
         $data_student['st_cate'] = $this->input->post('add_cate');
         $data_student['st_religion'] = $this->input->post('religion');
         $data_student['st_nationalId'] = $this->input->post('national_id');
@@ -749,25 +686,47 @@ printr($this->input->post());
         $data_student['st_phone'] = $this->input->post('phone');
         $data_student['st_mphone'] = $this->input->post('m_phone');
         $data_student['st_email'] = $this->input->post('lg_email');
-        $data_student['st_image'] = $this->input->post('lg_fname');
-        $data_student['st_transportation'] = $this->input->post('lg_fname');
-        $data_student['st_accommodation'] = $this->input->post('lg_fname');
-        $data_student['st_eng_name'] = $this->input->post('lg_fname');
-        $data_student['st_last_ins_name'] = $this->input->post('lg_fname');
-        $data_student['st_last_ins_course'] = $this->input->post('lg_fname');
-        $data_student['st_last_ins_year'] = $this->input->post('lg_fname');
-        $data_student['st_last_ins_t_mark'] = $this->input->post('lg_fname');
-        $data_student['st_last_ins_y_mark'] = $this->input->post('lg_fname');
-        $data_student['st_data'] = $this->input->post('lg_fname');
-        
+        $data_student['st_image'] = $this->input->post('lg_img');
+        $data_student['st_transportation'] = $this->input->post('transportation');
+        $data_student['st_accommodation'] = $this->input->post('accommodation');
+        $data_student['st_eng_name'] = $this->input->post('eng_name');
+        $data_student['st_last_ins_name'] = $this->input->post('ins_name');
+        $data_student['st_last_ins_course'] = $this->input->post('ed_course');
+        $data_student['st_last_ins_year'] = $this->input->post('ed_year');
+        $data_student['st_last_ins_t_mark'] = $this->input->post('ed_total_marks');
+        $data_student['st_last_ins_y_mark'] = $this->input->post('ed_total_grade');
+        $data_student['st_date'] = date('Y-m-d');
 
-        // ////////////////////////// end of linking up with unversity calender
+        $student_id = $this->sadmin_model->save_student_record($data_student);
+        
+        
+        $student_parent = array();
+        $student_parent['st_lg_id']     = $user_id;
+        $student_parent['pr_fname']     = $this->input->post('par_fname');
+        $student_parent['pr_lname']     = $this->input->post('par_lname');
+        $student_parent['pr_relation']  = $this->input->post('par_relation');
+        $student_parent['pr_dob']       = $this->input->post('par_dob');
+        $student_parent['pr_education'] = $this->input->post('par_education');
+        $student_parent['pr_occupation'] = $this->input->post('par_occupation');
+        $student_parent['pr_email']     = $this->input->post('par_email');
+        $student_parent['pr_address1']  = $this->input->post('par_address1');
+        $student_parent['pr_address2']  = $this->input->post('par_address2');
+        $student_parent['pr_city']      = $this->input->post('par_city');
+        $student_parent['pr_state']     = $this->input->post('par_state');
+        $student_parent['pr_country']   = $this->input->post('par_country');
+        $student_parent['pr_phone1']    = $this->input->post('par_phone1');
+        $student_parent['pr_phone2']    = $this->input->post('par_phone2');
+        $student_parent['pr_mobile']    = $this->input->post('par_mobile');
+        $student_parent['pr_date']      = date('Y-m-d');
+        $student_parent['pr_status']    = 1;
+        $student_id = $this->sadmin_model->save_student_parent_record($student_parent);
+// ////////////////////////// end of linking up with unversity calender
         // and new role
         // //adding school admin school course
         // /////////////
         $this->load->library('pagination');
 
-        $config ['base_url'] = base_url() . index_page() . '/sadmin/mng_schools';
+        $config ['base_url'] = base_url() . index_page() . '/sadmin/mng_students';
 
         $config ['total_rows'] = $this->sadmin_model->static_count_schools();
 
@@ -779,12 +738,12 @@ printr($this->input->post());
 
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
-        $data_send ['schools'] = $this->sadmin_model->get_all_schools($config ["per_page"], $page);
+        $data_send ['students'] = $this->sadmin_model->get_all_students($config ["per_page"], $page);
 
         // $array_data['comefrom'] = 'page';
         $data_send ['comefrom'] = 'ajax';
 
-        $data_send ['page'] = 'mng_schools';
+        $data_send ['page'] = 'mng_students';
 
         if ($page == 'First') {
             $data_send ['i'] = 1;
@@ -792,106 +751,85 @@ printr($this->input->post());
             $data_send ['i'] = (10 * $page / 10) + 1;
         }
 
-        $data_send ['schools'] = $this->sadmin_model->get_all_schools();
+        $data_send ['students'] = $this->sadmin_model->get_all_students();
 
         if ($this->input->post('page') == 'page') {
-            echo 'saved';
+            echo '2';
         } else {
-
-            $this->load->view('sadmin/mng_schools', $data_send);
+            echo '1';
+//            redirect('sadmin/mng_students');
+//            $this->load->view('sadmin/mng_students', $data_send);
         }
     }
 
 
     function remove_student() {
 
-        $id = $this->input->get('remove_school');
+        $id = $this->input->get('remove_student');
 
-        $data = $this->sadmin_model->get_school_byid($id);
+        $data = $this->sadmin_model->get_student_byid($id);
+        $role = $this->sadmin_model->get_role_id_by_name('university');
+        $this->sadmin_model->remove_student_record($id, $role);
 
-        $this->zf_cache->remove($data['school_subdomain']);
-
-        $this->sadmin_model->additional_general($id);
-
-        $this->sadmin_model->adittional_info($id);
-
-        $this->sadmin_model->assignments_uploads($id);
-
-        $this->sadmin_model->remove_attendences($id);
-
-        $this->sadmin_model->attendence_notes($id);
-
-        $this->sadmin_model->courses_relationship($id);
-
-        $this->sadmin_model->remove_custom_event_types($id);
-
-        $this->sadmin_model->remove_event_general($id);
-
-        $this->sadmin_model->remove_file_sharing($id);
-
-        $this->sadmin_model->remove_forum($id);
-
-        $this->sadmin_model->remove_groupchat($id);
-
-        $this->sadmin_model->remove_groupchatdata($id);
-
-        $this->sadmin_model->remove_instructor_hours($id);
-
-        $this->sadmin_model->remove_messages($id);
-
-        $this->sadmin_model->remove_notification($id);
-
-        $this->sadmin_model->remove_permissions($id);
-
-        $this->sadmin_model->remove_user_colors($id);
-
-        $school_role = $this->sadmin_model->get_role_id_by_name('admin school');
-
-        $this->sadmin_model->remove_school_record($id, $school_role);
-
-        $this->sadmin_model->remove_school_users_all($id);
-
-        $this->sadmin_model->remove_school_users_custom_calender($id);
-
-        $this->sadmin_model->remove_threadposts($id);
-
-        $this->sadmin_model->remove_settings_school($id);
-
-        $this->sadmin_model->remove_roles($id);
-
-        $this->sadmin_model->deny_req1($id);
     }
 
     function update_student() {
         $id = $this->input->get('id');
+        if(!empty($id)){
+            $data = array("st_lg_id"=>$id);
+            $up_student = $this->sadmin_model->get_student_bydata($data);
+            $up_student_parent = $this->sadmin_model->get_student_parent_bydata($data);
 
-        $up_scool = $this->sadmin_model->get_school_byid($id);
+            $data_send ['student'] = $up_student;
+            $data_send ['parent'] = $up_student_parent;
 
-        $data_send ['schools'] = $up_scool;
+            $data_send ['comefrom'] = 'page';
 
-        $data_send ['comefrom'] = 'ajax';
 
-        $get_skool = $this->users_model->dropdown_skooltype();
+            $type_s = '';
 
-        $type_s = '';
+            $data_send ['selected'] = '';
+            $data_send ['js_files'] = array(
+    //            base_url('files/calender/src/_loader.js'),
+                base_url('files/date_picker/js/jquery-ui-1.8.24.custom.min.js'),
+                base_url('files/fancybox/fancybox/jquery.mousewheel-3.0.4.pack.js'),
+                base_url('files/fancybox/fancybox/jquery.fancybox-1.3.4.pack.js'),
+                base_url('files/js/jquery_validation.js'),
+                base_url('js/sadmin.index.js'),
+                base_url('files/jquery_image_upload/js/vendor/jquery.ui.widget.js'),
+                base_url('files/jquery_image_upload/js/tmpl.min.js'),
+                base_url('files/jquery_image_upload/js/load-image.min.js'),
+                base_url('files/jquery_image_upload/js/canvas-to-blob.min.js'),
+                base_url('files/jquery_image_upload/js/bootstrap.min.js'),
+                base_url('files/jquery_image_upload/js/jquery.fileupload.js'),
+                base_url('files/jquery_image_upload/js/jquery.fileupload-process.js'),
+                base_url('files/jquery_image_upload/js/jquery.fileupload-image.js'),
+                base_url('files/jquery_image_upload/js/jquery.fileupload-validate.js'),
+                base_url('files/jquery_image_upload/js/jquery.fileupload-ui.js'),
+                base_url('files/jquery_image_upload/js/main.js'),
 
-        $data_send ['selected'] = '';
+    //            base_url('themes/starlight/js/plugins/jquery.dataTables.min.js'),
+    //            base_url('themes/starlight/js/custom/tables.js')
+            );
 
-        if (!empty($get_skool)) {
-            foreach ($get_skool as $i => $get_s_type) {
-                if ($get_s_type ['role_name'] == $up_scool ['type']) {
-                    $data_send ['selected'] = $i;
-                }
+            $data_send ['session'] = $this->login_credentials_get();
 
-                $type_s [] = $get_s_type ['role_name'];
-            }
+            $data_send ['addmission_id'] = $up_student['st_addmission_id'];
+            $this->session->set_userdata("addmission_id",$data_send ['addmission_id']);
+            $data_send ['students'] = array();//$this->sadmin_model->get_all_schools();
+            $data_send ['countries'] = $this->sadmin_model->get_all_countries();
 
-            $data_send ['schools_type'] = form_dropdown('role_name', $type_s, $data_send ['selected'], 'id="skool_typee"');
+            $data_send ['page'] = 'mng_students';
+            $data_send ['title'] = 'Update Student';
 
-            $data_send ['schools_chek'] = $type_s;
+    //printr($array_data);
+            $this->load->view('sadmin/base', $data_send);
+//            $this->load->view('sadmin/update_student', $data_send);
         }
-
-        $this->load->view('sadmin/update_school', $data_send);
+        else{
+            redirect('sadmin/mng_students');
+        }
+        
     }
 
 

@@ -150,7 +150,6 @@ class UploadHandler
         if ($initialize) {
             $this->initialize();
         }
-       
     }
 
     protected function initialize() {
@@ -209,6 +208,8 @@ class UploadHandler
             }
             $version_path = $version.'/';
         }
+//        global $folder_path;
+//        echo 'aas:'.$folder_path.$this->options['upload_dir'];exit;
         return $this->options['upload_dir'].$this->get_user_path()
             .$version_path.$file_name;
     }
@@ -242,10 +243,12 @@ class UploadHandler
     }
 
     protected function set_additional_file_properties($file) {
+        global $folder_path;
+        $addmission_id = explode('/', $folder_path);
         $file->deleteUrl = $this->options['script_url']
             .$this->get_query_separator($this->options['script_url'])
             .$this->get_singular_param_name()
-            .'='.rawurlencode($file->name);
+            .'='.rawurlencode($file->name).'&admission_id='.rawurlencode($addmission_id[1]);
         $file->deleteType = $this->options['delete_type'];
         if ($file->deleteType !== 'DELETE') {
             $file->deleteUrl .= '&_method=DELETE';
@@ -1306,14 +1309,15 @@ class UploadHandler
         }
         $response = array();
         foreach($file_names as $file_name) {
-            echo 'filePath: '.$file_path = $this->get_upload_path($file_name);
-            exit;
+            $file_path = $this->get_upload_path($file_name);
+//            echo 'filePath: '.$file_path = $this->get_upload_path($file_name);
+//            exit;
             $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
             if ($success) {
                 foreach($this->options['image_versions'] as $version => $options) {
                     if (!empty($version)) {
                         $file = $this->get_upload_path($file_name, $version);
-                        echo 'file'.$file;exit;
+//                        echo 'file'.$file;exit;
                         if (is_file($file)) {
                             unlink($file);
                         }

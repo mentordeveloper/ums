@@ -721,9 +721,9 @@ class Sadmin_model extends MY_model {
         return $result;
     }
 
-    function remove_school_record($id, $role) {
+    function remove_student_record($id, $role) {
         $condition = array(
-            'id' => $id
+            'st_id' => $id
         );
 
         $removed_login = $this->remove_login_data($id, $role);
@@ -741,28 +741,18 @@ class Sadmin_model extends MY_model {
         // school is entirely removed which manages school/university calender
         $this->db->select('*');
         $this->db->from('tbl_student_detail');
-        $this->db->where('id', $id);
+        $this->db->where('st_id', $id);
 
         $query = $this->db->get();
 
         $result = $query->result_array();
 
         $data = $result [0];
-
-        $condition_1 = array(
-            'co_name' => $this->s_string_defined,
-            's_id' => $data ['id']
-        );
-
-        $this->db->delete('tbl_courses_list', $condition_1);
-
         $condition = array(
-            'lg_fname' => $data ['name'],
-            'lg_lname' => $data ['name'],
-            'lg_email' => $data ['school_username'],
-            'lg_password' => $data ['school_password'],
+            'lg_fname' => $data ['st_fname'],
+            'lg_lname' => $data ['st_lname'],
+            'lg_email' => $data ['st_email'],
             'lg_type' => $role,
-            's_id' => $data ['id']
         );
 
         return $this->db->delete('tbl_login', $condition);
@@ -783,9 +773,9 @@ class Sadmin_model extends MY_model {
             $this->db->select($getonly);
         }
         $this->db->from('tbl_student_detail');
-        $this->db->join('tbl_about', 'tbl_about.id=tbl_student_detail.id', 'left');
-        $this->db->join('tbl_login', 'tbl_login.lg_email=tbl_student_detail.school_username', 'left');
-        $this->db->join('tbl_settings_school', 'tbl_student_detail.id=tbl_settings_school.s_id', 'left');
+        $this->db->join('tbl_about', 'tbl_about.id=tbl_student_detail.st_id', 'left');
+        $this->db->join('tbl_login', 'tbl_login.lg_email=tbl_student_detail.lg_email', 'left');
+        $this->db->join('tbl_settings_school', 'tbl_student_detail.st_id=tbl_settings_school.s_id', 'left');
         $this->db->where('tbl_student_detail.school_subdomain', $name);
 
         $query = $this->db->get();
@@ -818,7 +808,7 @@ class Sadmin_model extends MY_model {
     function check_school_username($data) {
         $this->db->select('*');
         $this->db->from('tbl_student_detail');
-        $this->db->where('school_username', $data ['username']);
+        $this->db->where('lg_email', $data ['username']);
 
         $query = $this->db->get();
 
@@ -848,22 +838,6 @@ class Sadmin_model extends MY_model {
      * Get school domain check
      */
 
-    function check_school_domainname($data, $record = false) {
-        $this->db->select('*');
-        $this->db->from('tbl_student_detail');
-        $this->db->where('school_subdomain', $data ['domainname']);
-        $query = $this->db->get();
-
-        if ($query->num_rows() > 0) {
-            if ($record) {
-                $fetch = $query->result_array();
-                return $fetch[0]['id'];
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     function get_video_byid($id) {
         $this->db->select('*');
@@ -908,10 +882,37 @@ class Sadmin_model extends MY_model {
         }
     }
 
-    function get_school_byid($id) {
+    function get_student_byid($id) {
         $this->db->select('*');
         $this->db->from('tbl_student_detail');
-        $this->db->where('id', $id);
+        $this->db->where('st_id', $id);
+
+        $query = $this->db->get();
+        $result = $query->result_array();
+        if (isset($result [0])) {
+            return $result [0];
+        } else {
+            return array();
+        }
+    }
+    
+    function get_student_bydata($data) {
+        $this->db->select('*');
+        $this->db->from('tbl_student_detail');
+        $this->db->where($data);
+
+        $query = $this->db->get();
+        $result = $query->result_array();
+        if (isset($result [0])) {
+            return $result [0];
+        } else {
+            return array();
+        }
+    }
+    function get_student_parent_bydata($data) {
+        $this->db->select('*');
+        $this->db->from('tbl_student_parent_info');
+        $this->db->where($data);
 
         $query = $this->db->get();
         $result = $query->result_array();
@@ -960,10 +961,10 @@ class Sadmin_model extends MY_model {
         return $query->num_rows();
     }
 
-    function get_all_schools($limit = '', $start = '') {
+    function get_all_students($limit = '', $start = '') {
         $this->db->select('*');
         $this->db->from('tbl_student_detail');
-        $this->db->order_by('id', 'desc');
+        $this->db->order_by('st_id', 'desc');
 
         if (!empty($limit)) {
             $this->db->limit($limit, $start);

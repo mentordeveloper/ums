@@ -24,8 +24,9 @@
         <tr>
           <th class="head0">No.</th>
           <th class="head1">Name</th>
-          <th class="head0">Status</th>
-          <th class="head1">Created Date</th>
+          <th class="head0">Roll#</th>
+          <th class="head1">Email</th>
+          <th class="head0">Created Date</th>
           <th class="head1">Actions</th>
         </tr>
       </thead>
@@ -33,8 +34,9 @@
         <tr>
           <th class="head0">No.</th>
           <th class="head1">Name</th>
-          <th class="head0">Status</th>
-          <th class="head1">Created Date</th>
+          <th class="head0">Roll#</th>
+          <th class="head1">Email</th>
+          <th class="head0">Created Date</th>
           <th class="head1">Actions</th>
         </tr>
       </tfoot>
@@ -43,19 +45,16 @@
   		{
 			
 	  ?>
-        <tr class="gradeA" id="row_<?php echo $perstudent['id']; ?>">
+        <tr class="gradeA" id="row_<?php echo $perstudent['st_id']; ?>">
           <td align="center"><?php echo $i; ?></td>
-          <td align="center"><strong><?php echo $perstudent['name']; ?></strong></td>
-          <td align="center"><?php if($perstudent['status']=='true'){ ?>
-            <img width="20" src="<?php echo base_url() ?>files/icons/1355052051_onebit_34.png" />
-            <?php }else{ ?>
-            <img width="20" src="<?php echo base_url() ?>files/icons/1355052074_mail-delete.png" />
-            <?php } ?></td>
-          <td align="center"><?php $perstudent['date_time']; $result = explode(" ",$perstudent['date_time']); echo $result[0];?></td>
+          <td align="center"><strong><?php echo ucwords($perstudent['st_fname'].' '.$perstudent['st_lname']); ?></strong></td>
+          <td align="center"><strong><?php echo ucwords($perstudent['st_roll_number']); ?></strong></td>
+          <td align="center"><strong><?php echo ucwords($perstudent['st_email']); ?></strong></td>
+          <td align="center"><?php echo $perstudent['st_date']; ?></td>
           <td align="right"><form class="stdform" action="#">
-              <button type="button" class="radius2" onClick="update_school(<?php echo $perstudent['id']; ?>)">Update</button>
-              <button type="button" class="radius2" onClick="remove_school(<?php echo $perstudent['id']; ?>,'<?php echo $perstudent['name']; ?>')">Remove</button>
-              <button type="button" class="radius2" onClick="location='<?php echo base_url(); ?>sadmin/permissions_skoollevel?id=<?php echo $perstudent['id']; ?>'	">Permissions</button>
+              <button type="button" class="radius2" onClick="update_student(<?php echo $perstudent['st_lg_id']; ?>)">Update</button>
+              <button type="button" class="radius2" onClick="remove_student(<?php echo $perstudent['st_lg_id']; ?>,'<?php echo $perstudent['st_fname']; ?>')">Remove</button>
+              <button type="button" class="radius2" onClick="location='<?php echo base_url(); ?>sadmin/permissions_skoollevel?id=<?php echo $perstudent['st_lg_id']; ?>'">Permissions</button>
             </form></td>
         </tr>
         <?php $i++; } ?>
