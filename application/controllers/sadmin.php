@@ -816,7 +816,6 @@ class Sadmin extends CI_Controller {
 
             $data_send ['addmission_id'] = $up_student['st_addmission_id'];
             $this->session->set_userdata("addmission_id",$data_send ['addmission_id']);
-            $data_send ['students'] = array();//$this->sadmin_model->get_all_schools();
             $data_send ['countries'] = $this->sadmin_model->get_all_countries();
 
             $data_send ['page'] = 'mng_students';
